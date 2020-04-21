@@ -1,0 +1,28 @@
+<template>
+    <div>
+        <div class="w-full bg-white rounded-lg p-2 mt-2 border-l-4 border-indigo-600" v-for="(event, index) in events" :key="index">
+            <div class="bg-indigo-500 px-2 inline-block rounded-full text-blue-100">
+                {{  moment(event.ts/1000).fromNow()  }}
+            </div>
+            <div class="bg-gray-200 shadow-inner p-2 mt-1 rounded-lg">
+                {{ event.data.update }}
+            </div>
+            <div class="text-xs">
+                Timestamp:
+                {{ moment(event.ts/1000).format('MMMM Do YYYY, h:mm:ss a') }}
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+var moment = require('moment');
+export default {
+    props:['events'],
+    data(){
+        return{
+            moment
+        }
+    }
+    
+}
+</script>
