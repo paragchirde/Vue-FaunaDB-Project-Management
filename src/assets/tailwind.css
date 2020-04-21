@@ -1,5 +1,6 @@
+/* @import 'bootstrap/dist/css/bootstrap.css';
+@import 'bootstrap-vue/dist/bootstrap-vue.css'; */
+
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;

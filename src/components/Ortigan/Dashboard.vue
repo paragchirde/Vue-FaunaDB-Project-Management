@@ -61,21 +61,21 @@
             <div class="w-full md:w-2/3 bg-white p-8">
                 <p class="font-semibold text-3xl text-gray-700 mb-2">List of projects</p>
                 <div>
-                        <!-- <div class="flex flex-wrap">
-                            <div class="h-auto p-4 mt-2 w-full md:w-1/3" v-for="(project,index) in allProjects" :key="index">
-                                <ProjectCard :data="project" />
-                            </div>                        
-                        </div> -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                        <div class="" v-for="(project,index) in allProjects" :key="index">
+                            <ProjectCard :data="project" class="mt-6" />
+                        </div>
+                    </div>
                     <div class="w-full bg-orange-300 p-2 text-orange-600 rounded-lg" v-if="allProjects.length == 0">
                         No Data Found
                     </div>
-                    <b-container class="bv-example-row" v-else>
+                    <!-- <b-container class="bv-example-row" v-else>
                         <b-row v-masonry item-selector=".item">
                             <b-col cols="12" md="4" class="item" v-masonry-tile v-for="(project,index) in allProjects" :key="index">
                                 <ProjectCard :data="project" class="mt-6" />
                             </b-col>
                         </b-row>
-                    </b-container>
+                    </b-container> -->
                 </div>
             </div>
         </div>

@@ -8,7 +8,6 @@ import VeeValidate from 'vee-validate';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { VueMasonryPlugin } from 'vue-masonry';
 
-import './assets/bv.scss'
 import "vue-toastification/dist/index.css";
 import './assets/tailwind.css'
 // import "./assets/scss/toastStyles.scss"
