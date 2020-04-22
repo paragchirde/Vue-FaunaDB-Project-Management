@@ -1,15 +1,16 @@
 <template>
     <div>
-        <div class="max-w-sm rounded overflow-hidden shadow-lg border-t-4 border-indigo-500 p-4">
+        <div class="max-w-sm rounded overflow-hidden shadow-lg border-t-4 border-blue p-4">
             <div class="">
-                <p class="text-xs bg-blue-200 text-blue-600 inline-block px-1">Static</p>
+                <p class="text-xs bg-blue text-white inline-block px-1">Static</p>
                 <div class="flex justify-between">
                     <div class="font-semibold text-base mb-2 text-gray-700">
                         {{ data.data.name }}
                     </div>
-                    <div class="font-light text-xs bg-yellow-500 p-1 rounded w-16 h-6 align-middle text-center">
+                    <!-- <div class="font-light text-xs bg-yellow-500 p-1 rounded w-16 h-6 align-middle text-center">
                         <span class="">Pending</span>
-                    </div>
+                    </div> -->
+                     <vs-chip :color="statusColor" transparent>{{ data.data.status }}</vs-chip>
                 </div>
                 <div class="flex justify-between">
                     <div class="text-gray-500 text-base">
@@ -37,7 +38,7 @@
                         </div>
                 </div>
                 <router-link :to="{ name:'project-view', params: { id: data.ref.id } }">
-                    <button class="bg-indigo-500 px-2 text-white font-thin text-sm rounded-sm shadow-lg align-middle">View</button> 
+                    <button class="bg-blue px-2 text-white font-base text-sm rounded-sm shadow-lg align-middle">View</button> 
                 </router-link>
             </div>
         </div>
@@ -51,6 +52,21 @@ export default {
     data(){
         return{
             moment:moment,
+        }
+    },
+    computed:{
+        statusColor(){
+            var color = ''
+            if(this.data.data.status == 'Completed'){
+                color =  'success'
+            } else if(this.data.data.status == 'Ready to Deploy'){
+                color = 'warning'
+            } else if(this.data.data.status == 'Feedback Mode'){
+                color = 'danger'
+            } else {
+                color = 'primary'
+            }
+            return color
         }
     }
 }

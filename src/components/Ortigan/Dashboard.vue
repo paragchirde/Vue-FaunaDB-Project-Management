@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="flex flex-wrap">
+            
             <div class="w-full md:w-1/3 bg-gray-100 p-8">
             <!-- <router-link :to="{ name:'ortigan-project-login' }">
                 <button class="bg-indigo-500 p-2 text-center text-white font-light rounded shadow-lg">Login
@@ -14,7 +15,7 @@
             </router-link>
             <button @click="logout()" class="bg-orange-500 p-2 text-center text-white font-light rounded shadow-lg">Logout</button> -->
                 <p class="font-semibold text-3xl text-gray-700 mb-2 text-center">Start a new project</p>
-                <div class="bg-white h-auto w-auto mt-6 rounded-sm p-8 shadow border-t-4 border-indigo-500">
+                <div class="bg-white h-auto w-auto mt-6 rounded-sm p-8 shadow border-t-4 border-blue">
                     <div>
                         <div class="flex flex-wrap">
                             <div>
@@ -23,19 +24,19 @@
                             </div>
                             <div class="mt-4">
                                 <label for="client-name" class="font-light text-base mb-2 text-gray-700">Enter the name of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Client Name" v-model="projectClient">
+                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-name" type="text" placeholder="Client Name" v-model="projectClient">
                             </div>
                             <div class="mt-4">
                                 <label for="client-number" class="font-light text-base mb-2 text-gray-700">Enter the contact number of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="number" placeholder="Client Contact" v-model="projectClientContact">
+                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-contact" type="number" placeholder="Client Contact" v-model="projectClientContact">
                             </div>
                             <div class="mt-4">
                                 <label for="client-email" class="font-light text-base mb-2 text-gray-700">Enter the email of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Client Email" v-model="projectClientEmail">
+                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-email" type="text" placeholder="Client Email" v-model="projectClientEmail">
                             </div>
                             <div class="mt-4">
                                 <label for="project-cost" class="font-light text-base mb-2 text-gray-700">Enter the Estimated Cost</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="number" placeholder="Estimated Cost" v-model="projectCost">
+                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-cost" type="number" placeholder="Estimated Cost" v-model="projectCost">
                             </div>  
                             <div class="mt-4 w-full">
                                 <label for="project-cost" class="font-light text-base mb-2 text-gray-700">Select the project type</label>
@@ -51,8 +52,7 @@
                             </div>                    
                         </div>
                         <div class="flex justify-end mt-4">
-                            <button class="bg-indigo-500 p-2 text-white font-light rounded shadow-lg" @click="create()">Create Project
-                                <b-spinner label="Loading..." small v-if="loading==true"></b-spinner>
+                            <button class="bg-blue p-2 text-white font-base rounded shadow-lg" @click="create()">Create Project
                             </button>
                         </div>  
                     </div>
@@ -69,13 +69,6 @@
                     <div class="w-full bg-orange-300 p-2 text-orange-600 rounded-lg" v-if="allProjects.length == 0">
                         No Data Found
                     </div>
-                    <!-- <b-container class="bv-example-row" v-else>
-                        <b-row v-masonry item-selector=".item">
-                            <b-col cols="12" md="4" class="item" v-masonry-tile v-for="(project,index) in allProjects" :key="index">
-                                <ProjectCard :data="project" class="mt-6" />
-                            </b-col>
-                        </b-row>
-                    </b-container> -->
                 </div>
             </div>
         </div>
@@ -109,23 +102,15 @@ export default {
                 1: 'Static',
                 2: 'Dynamic'
             },
-            loading: false,
             projects: [],
             allProjects: [],
             projectData: {},
             projectObj: {
-            }
+            },
 
         }
     },
     created(){
-        console.log(this.userId)
-        client.query(
-        q.Get(q.Ref(q.Collection('users'), this.userId))
-        )
-        .then(res => {
-            console.log(res)
-        })
         this.getAll()
 
     },
@@ -153,7 +138,7 @@ export default {
                 })
         },
         create(){
-            this.loading = true
+            this.$vs.loading({})
             this.projectData = {
                 "name" : this.projectName,
                 "client" : this.projectClient,
@@ -176,14 +161,16 @@ export default {
             )
             .then((ret) => {
                 console.log(ret)
-                this.loading = false
-                this.showToast('Project Added', 'success')
                 this.projects.push(ret.data)
                 this.getAll()
+                this.showToast('Project Added', 'success')
+                this.$vs.loading.close()
             })
             .catch(err => {
                 console.log(err)
                  this.loading = false
+                 this.$vs.loading.close()
+                 this.showToast('Some Error Occured', 'danger')
             })
         },
         logout(){

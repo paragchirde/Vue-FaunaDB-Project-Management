@@ -1,8 +1,10 @@
 <template>
     <div>
-        <div class="w-full bg-white rounded-lg p-2 mt-2 border-l-4 border-indigo-600" v-for="(event, index) in events" :key="index">
-            <div class="bg-indigo-500 px-2 inline-block rounded-full text-blue-100">
+        <div class="w-full bg-white rounded-lg p-2 mt-2 border-l-4 border-blue" v-for="(event, index) in events" :key="index">
+            <div class="inline-block">
+                <vs-chip color="primary">
                 {{  moment(event.ts/1000).fromNow()  }}
+                </vs-chip>
             </div>
             <div class="bg-gray-200 shadow-inner p-2 mt-1 rounded-lg">
                 {{ event.data.update }}

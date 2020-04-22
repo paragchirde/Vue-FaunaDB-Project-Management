@@ -6,22 +6,23 @@
                 <div class="flex justify-between">
                     <div>   
                         <router-link :to="{ name:'ortigan-dashboard' }">
-                            <b-button v-b-modal.modal-1
+                            <vs-button
                             class="border-none bg-indigo-500 px-2 text-white font-semibol text-base rounded-sm align-middle shadow-md hover:bg-indigo-600 hover:shadow-none"
-                            >Dashboard</b-button>
+                            >Dashboard</vs-button>
                         </router-link>
                         <div class="font-semibold text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-thin bg-blue-200 text-blue-600 inline-block px-1">{{ project.data.type }}</p></div>
-                        <p class="text-xs px-1 bg-gray-700 inline-block text-gray-600 mt-1 text-white">Creared At: {{ moment(project.ts/1000).format('MMMM Do YYYY') }}</p>
+                        <vs-chip color="primary">
+                            Creared At: {{ moment(project.ts/1000).format('MMMM Do YYYY') }}
+                        </vs-chip>
                         <div>
-                            <button @click="remove()" class="bg-red-400 px-2 shadow-sm rounded-sm text-center font-light text-sm text-white">Delete</button>
+                            <vs-button @click="remove()" color="danger" size="small">Delete</vs-button>
                         </div>
                     </div> 
                     <div class="">
-                        <b-button v-b-modal.modal-1
-                        class="border-none bg-indigo-500 px-2 text-white font-semibol text-base rounded-sm align-middle shadow-md hover:bg-indigo-600 hover:shadow-none"
-                        >Add New Payment <span class="font-extrabold">+</span></b-button>
-                        <b-modal id="modal-1" title="Add a New Payment from the client" hide-footer>
-                             <div class="flex flex-wrap">
+                        <vs-button @click="popupActivo=true" color="primary" type="border" class="w-full">Add New Payment</vs-button>
+                        <vs-popup class="holamundo"  title="Add a new payment for your project" :active.sync="popupActivo">
+                        <div>
+                            <div class="flex flex-wrap">
                                 <div class="w-full">
                                     <label for="project-desc" class="font-light text-base mb-2 text-gray-700">Enter the description of payment</label>
                                     <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
@@ -35,7 +36,7 @@
                                     <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                     name="paymentCost"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                                    id="inline-full-name" type="number" placeholder="Job Cost" v-model="paymentCost">
+                                    id="" type="number" placeholder="Job Cost" v-model="paymentCost">
                                      <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('paymentCost') }}</span>
                                 </div>
                                 <div class="w-full">
@@ -43,7 +44,7 @@
                                     <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                     name="paymentBy"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
-                                    id="inline-full-name" type="text" placeholder="Payment By" v-model="paymentBy">
+                                    id="" type="text" placeholder="Payment By" v-model="paymentBy">
                                     <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('paymentBy') }}</span>
                                 </div>
                                 <div class="w-full">
@@ -63,34 +64,38 @@
                                     <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                     name="paymentReceivedBy"
                                      class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
-                                     id="inline-full-name" type="text" placeholder="Received By" v-model="paymentReceivedBy">
+                                     id="" type="text" placeholder="Received By" v-model="paymentReceivedBy">
                                      <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('paymentReceivedBy') }}</span>
                                 </div>
                             </div>
                             <div class="float-right mt-4">
                                 <div class="">
-                                    <button @click="addPayment()" class="border-none bg-indigo-500 p-2 text-white font-thin text-lg rounded-sm align-middle shadow-lg hover:bg-indigo-600 hover:shadow-none">
+                                    <!-- <button @click="addPayment()" class="border-none bg-indigo-500 p-2 text-white font-thin text-lg rounded-sm align-middle shadow-lg hover:bg-indigo-600 hover:shadow-none">
                                         Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner>
-                                    </button>
+                                    </button> -->
+                                    <vs-button @click="addPayment()" color="primary" type="filled">Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner></vs-button>
                                 </div>
                             </div> 
-                        </b-modal>
+
+                        </div>
+                        </vs-popup>
+                        
+                        <!--  -->
                         <div class="mt-2 font-light items-end">
-                            <div class="relative">
-                                <select
-                                v-model="selectedStatus"
-                                 @change="updateStatus()"
-                                 class="block bg-white border-2 border-indigo-400 text-gray-700 appearance-none w-full py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-500" id="grid-state">
-                                    <option selected>{{ project.data.status }}</option>
-                                    <option>Working</option>
-                                    <option>Feedback Mode</option>
-                                    <option>Ready to Deploy</option>
-                                    <option>Completed</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="#3182ce" d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                </div>
+                            <div class="flex justify-between">
+                                <p>Status</p>
+                                <p>
+                                    <vs-chip :color="statusColor" transparent>{{ project.data.status }}</vs-chip>
+                                </p>
                             </div>
+                            <vs-select
+                            class="selectExample"
+                            v-model="selectedStatus"
+                            @change="updateStatus()"
+                             icon="arrow_downward"
+                            >
+                            <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in paymentMethods1" />
+                            </vs-select>
                         </div>
                     </div> 
                 </div>
@@ -106,9 +111,9 @@
                         </div>
                         <!-- Total -->
                         <div class="w-full md:w-1/2 flex flex-wrap shadow-md mt-2 text-center m-auto">
-                            <div class="w-1/3 bg-white p-2 border-l-4 border-indigo-400">
+                            <div class="w-1/3 bg-white p-2 border-l-4 border-blue">
                                     <p class="font-base text-base text-gray-500 mb-2">Estimated</p>
-                                <p class="font-bold text-xl text-indigo-500 mb-2">₹{{ project.data.cost }}</p>
+                                <p class="font-bold text-xl text-blue mb-2">₹{{ project.data.cost }}</p>
                             </div>
                             <div class="w-1/3 bg-white p-2 border-l-4 border-green-400">
                                     <p class="font-base text-base text-gray-500 mb-2">Received</p>
@@ -142,6 +147,8 @@
     </div>
 </template>
 <script>
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 import Events from '../Ortigan/Events'
 import { appMixin } from '../../mixins.js'
 import PaymentCard from '../Ortigan/PaymentCard'
@@ -169,12 +176,19 @@ export default {
             selectedStatus: '',
             loading: false,
             loading2: false,
+            popupActivo:false,
 
             paymentMethods: {
                 1: 'Cash',
                 2: 'Google Pay/UIP',
                 3: 'Netbanking'
             },
+            paymentMethods1:[
+                {text:'Working',value:"Working"},
+                {text:'Feedback Mode',value:"Feedback Mode"},
+                {text:'Ready to Deploy',value:"Ready to Deploy"},
+                {text:'Completed',value:"Completed"},
+            ],
 
             paymentData: {},
             paymentObj: {},
@@ -206,7 +220,7 @@ export default {
                     client.query(
                     q.Paginate(q.Events(q.Ref(q.Collection('projects'), this.project.ref.id)))
                     ).then((ret) => {
-                        console.log("[EVENTS] ",ret)
+                        // console.log("[EVENTS] ",ret)
                         this.events = ret.data
                         // this.events.pop()
                         this.events.reverse()
@@ -268,6 +282,7 @@ export default {
             )
             .then((ret) => {
                 console.log(ret)
+                this.popupActivo=false,
                 this.showToast('Payment Added', 'success')
             })
             .then(() => {
@@ -344,6 +359,19 @@ export default {
             } else {
                 return this.project.data.cost - this.project.data.totalReceived
             }
+        },
+        statusColor(){
+            var color = ''
+            if(this.project.data.status == 'Completed'){
+                color =  'success'
+            } else if(this.project.data.status == 'Ready to Deploy'){
+                color = 'warning'
+            } else if(this.project.data.status == 'Feedback Mode'){
+                color = 'danger'
+            } else {
+                color = 'primary'
+            }
+            return color
         }
     }
 }
