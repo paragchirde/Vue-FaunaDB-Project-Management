@@ -1,44 +1,53 @@
 <template>
     <div>
+        <Header/>
         <div class="flex flex-wrap">
-            
             <div class="w-full md:w-1/3 bg-gray-100 p-8">
-            <!-- <router-link :to="{ name:'ortigan-project-login' }">
-                <button class="bg-indigo-500 p-2 text-center text-white font-light rounded shadow-lg">Login
-                    <b-spinner label="Loading..." small v-if="loading==true"></b-spinner>
-                </button>
-            </router-link>
-            <router-link :to="{ name:'ortigan-project-register' }">
-                <button class="bg-orange-500 p-2 text-center text-white font-light rounded shadow-lg">Register
-                    <b-spinner label="Loading..." small v-if="loading==true"></b-spinner>
-                </button>
-            </router-link>
-            <button @click="logout()" class="bg-orange-500 p-2 text-center text-white font-light rounded shadow-lg">Logout</button> -->
                 <p class="font-semibold text-3xl text-gray-700 mb-2 text-center">Start a new project</p>
                 <div class="bg-white h-auto w-auto mt-6 rounded-sm p-8 shadow border-t-4 border-blue">
                     <div>
                         <div class="flex flex-wrap">
                             <div>
                                 <label for="project-name" class="font-light text-base mb-2 text-gray-700">Enter the name of project</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Project Name" v-model="projectName">
+                                <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('title') ? 'border border-red-500' : '' "
+                                name="title"
+                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                                id="inline-full-name" type="text" placeholder="Project Name" v-model="projectName">
+                                <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('title') }}</span>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-2">
                                 <label for="client-name" class="font-light text-base mb-2 text-gray-700">Enter the name of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-name" type="text" placeholder="Client Name" v-model="projectClient">
+                                <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('client') ? 'border border-red-500' : '' "
+                                name="client"
+                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                                id="inline-client-name" type="text" placeholder="Client Name" v-model="projectClient">
+                                <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('client') }}</span>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-2">
                                 <label for="client-number" class="font-light text-base mb-2 text-gray-700">Enter the contact number of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-contact" type="number" placeholder="Client Contact" v-model="projectClientContact">
+                                <input v-validate="'required|max:10'" data-vv-validate-on="blur" :class="errors.first('contact') ? 'border border-red-500' : '' "
+                                name="contact"
+                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                                id="inline-client-contact" type="number" placeholder="Client Contact" v-model="projectClientContact">
+                                 <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('contact') }}</span>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-2">
                                 <label for="client-email" class="font-light text-base mb-2 text-gray-700">Enter the email of Client</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-client-email" type="text" placeholder="Client Email" v-model="projectClientEmail">
+                                <input  v-validate="'required|email'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
+                                name="email"
+                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                                id="inline-client-email" type="email" placeholder="Client Email" v-model="projectClientEmail">
+                                 <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('email') }}</span>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-2">
                                 <label for="project-cost" class="font-light text-base mb-2 text-gray-700">Enter the Estimated Cost</label>
-                                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-cost" type="number" placeholder="Estimated Cost" v-model="projectCost">
+                                <input  v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('cost') ? 'border border-red-500' : '' "
+                                name="cost"
+                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                                id="inline-cost" type="number" placeholder="Estimated Cost" v-model="projectCost">
+                                 <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('cost') }}</span>
                             </div>  
-                            <div class="mt-4 w-full">
+                            <div class="mt-2 w-full">
                                 <label for="project-cost" class="font-light text-base mb-2 text-gray-700">Select the project type</label>
                                 <div class="relative w-full">
                                     <select v-model="projectType" class="appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
@@ -52,22 +61,21 @@
                             </div>                    
                         </div>
                         <div class="flex justify-end mt-4">
-                            <button class="bg-blue p-2 text-white font-base rounded shadow-lg" @click="create()">Create Project
-                            </button>
+                            <vs-button :disabled="!validateForm"
+                             class="bg-blue p-2 text-white font-base rounded shadow-lg" @click="create()">Create Project
+                            </vs-button>
                         </div>  
                     </div>
                 </div>
             </div>
             <div class="w-full md:w-2/3 bg-white p-8">
                 <p class="font-semibold text-3xl text-gray-700 mb-2">List of projects</p>
-                <div>
+                hola, {{ user }}
+                <div>        
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
                         <div class="" v-for="(project,index) in allProjects" :key="index">
                             <ProjectCard :data="project" class="mt-6" />
                         </div>
-                    </div>
-                    <div class="w-full bg-orange-300 p-2 text-orange-600 rounded-lg" v-if="allProjects.length == 0">
-                        No Data Found
                     </div>
                 </div>
             </div>
@@ -76,15 +84,19 @@
 </template>
 <script>
 import { appMixin } from '../../mixins.js'
+import { userMixin } from '../../userStateMixin.js'
 var moment = require('moment');
 import ProjectCard from '../Ortigan/ProjectCard'
+import Header from './Header'
+
  
 const faunadb = require('faunadb')
 const client = new faunadb.Client({secret: process.env.VUE_APP_FAUNA_SECRET})
 const q = faunadb.query
 export default {
-     mixins: [appMixin],
+     mixins: [appMixin, userMixin],
      components:{
+         Header,
          ProjectCard
      },
      props:['userId'],
@@ -108,11 +120,12 @@ export default {
             projectObj: {
             },
 
+            user :this.$store.state.user.name
+
         }
     },
     created(){
         this.getAll()
-
     },
     methods:{
         getAll(){
@@ -148,12 +161,13 @@ export default {
                 "type" : this.projectType,
                 "status": "Created",
                 "totalReceived": 0,
-                "update": 'Project Created'
+                "update": 'Project Created',
+                "created_at": Date.now(),
+                "created_by": this.user
             }
             this.projectObj = {
                 data: this.projectData
             }
-            console.log(this.projectObj)
             client.query(
             q.Create(
                 q.Collection('projects'), this.projectObj
@@ -163,27 +177,45 @@ export default {
                 console.log(ret)
                 this.projects.push(ret.data)
                 this.getAll()
-                this.showToast('Project Added', 'success')
+                this.showToast('Project Created', `${this.projectName} has been successfully created`, 'success')
+                this.clearfields()
                 this.$vs.loading.close()
             })
             .catch(err => {
                 console.log(err)
                  this.loading = false
                  this.$vs.loading.close()
-                 this.showToast('Some Error Occured', 'danger')
+                 this.showToast('Error', 'There is been some error in your action :(', 'danger')
             })
         },
-        logout(){
-            client.query(q.Logout(true))
-            .then(res => {
-                console.log(res)
-                localStorage.removeItem('token')
-                this.$router.push({name:'ortigan-project-login'})
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        }
+        clearfields(){
+            this.projectName = '',
+            this.projectClient = '',
+            this.projectClientContact = '',
+            this.projectClientEmail = '',
+            this.projectCost = '',
+            this.projectType = ''
+        },
+        
+
+    },
+    computed: {
+        validateForm() {
+            console.log(this.errors.any())
+            return !this.errors.any() && this.projectName != "" && this.projectClient != "" && this.projectClientContact != "" && this.projectClientEmail != "" && this.projectCost != "" && this.projectType != "";
+        },
     },
 }
 </script>
+
+<style>
+
+#div-with-loading{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0px 3px 10px 0px rgba(0,0,0,.1)
+}
+</style>

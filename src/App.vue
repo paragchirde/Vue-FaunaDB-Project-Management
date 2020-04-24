@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header/>
     <div>
+    <!-- <Header/> -->
       <router-view></router-view>
     </div>
     <Footer/>
@@ -9,10 +9,10 @@
 </template>
 <script>
 import Footer from './components/Ortigan/Footer'
-import Header from './components/Ortigan/Header'
+// import Header from './components/Ortigan/Header'
 export default {
   components: {
-    Header,
+    // Header,
     Footer
   }
 }

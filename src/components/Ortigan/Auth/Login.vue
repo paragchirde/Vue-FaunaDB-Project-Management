@@ -3,15 +3,18 @@
         <div class="w-full bg-gray-300 h-screen">
             <div class="container mx-auto h-full flex justify-center items-center">
                 <div class="w-1/3">
-                    <h2 class="font-light mb-4 text-center text-gray-600">Login to our website</h2>
-                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div class="text-center mb-4">
+                        <p class="text-blue font-semibold text-3xl">Ortigan | <span class="font-base text-base"> Project Management</span> </p>
+                    </div>
+                    <!-- <h2 class="font-light mb-4 text-center text-gray-600">Login to our website</h2> -->
+                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-t-4 border-blue">
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-light mb-2" for="email">
                                 Email
                             </label>
                             <input  v-model="email" v-validate="'required|email|min:3'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                 name="email" class="shadow-sm appearance-none  rounded w-full py-2 px-3 text-gray-700 leading-tight"
-                                id="username" type="text" placeholder="Username">
+                                id="username" type="text" placeholder="Enter your email">
                             <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('email') }}</span>
                         </div>
                         <div class="mb-6">
@@ -25,22 +28,18 @@
                             <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('password') }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <!-- <button
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-light py-2 px-4 rounded"
-                                type="button" aria-disabled="true">
-                                Sign In
-                            </button> -->
-                            <b-button :disabled="!validateForm" variant="primary" @click.prevent="loginUser()">Login</b-button>
-                            <a class="inline-block align-baseline font-light text-sm text-blue-500 hover:text-blue-800" href="#">
-                                Forgot Password?
-                            </a>
+                            <p>
+                                <router-link :to="{ name:'ortigan-project-register' }">
+                                    Register
+                                </router-link>
+                            </p>
+                            <vs-button :disabled="!validateForm" variant="primary" @click.prevent="loginUser()">Login</vs-button>
                         </div>
                     </form>
-                    <p class="text-center text-gray-500 text-xs">
+                    <p class="text-center text-gray-600 text-sm">
                         &copy;2020 Ortigan. All rights reserved.
                     </p>
                     <p>
-                        {{ token }}
                     </p>
                 </div>
             </div>
@@ -68,7 +67,6 @@ export default {
             if (!result) {
             return;
             }
-
             alert("Form submitted!");
         });
         },
@@ -80,19 +78,23 @@ export default {
                 )
             )
             .then(res => {
-                console.log(res)
                 this.token = res.secret
-                console.log(res.secret)
                 if(this.token!=null){
                     localStorage.setItem('token', this.token)
-                    console.log(res.ref.id)
-                    this.$router.push({name:'ortigan-dashboard', params:{userId: res.ref.id}})
+                    client.query(q.Get(q.Ref(q.Collection('users'), res.instance.value.id)))
+                    .then(res => {
+                        localStorage.setItem('user', JSON.stringify(res.data))
+                        this.$store.state.user = res.data
+                        this.showToast('Success', '', 'success')
+                        this.$router.push({name:'ortigan-dashboard'})
+                    })
                 } else {
                     console.log("Error")
                 }   
             })
             .catch(err => {
                 console.log(err)
+                
             })
         }
     },

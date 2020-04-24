@@ -15,12 +15,18 @@ const routes = [
         name: 'ortigan-dashboard',
         component: OrtiganDashboard,
         props: true,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/ortigan/project/:id',
         name: 'project-view',
         component: OrtiganProjectView,
-        props: true
+        props: true,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/ortigan/login',

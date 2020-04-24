@@ -1,25 +1,23 @@
 <template>
     <div>
+        <Header/>
         <div v-if="loading">Loading Data....</div>
         <div v-else class="flex flex-wrap">
             <div class="w-full md:w-3/4 p-12">
+                <router-link :to="{ name:'ortigan-dashboard' }">
+                    <vs-button type="border" size="small"
+                    >Dashboard</vs-button>
+                </router-link>
                 <div class="flex justify-between">
                     <div>   
-                        <router-link :to="{ name:'ortigan-dashboard' }">
-                            <vs-button
-                            class="border-none bg-indigo-500 px-2 text-white font-semibol text-base rounded-sm align-middle shadow-md hover:bg-indigo-600 hover:shadow-none"
-                            >Dashboard</vs-button>
-                        </router-link>
-                        <div class="font-semibold text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-thin bg-blue-200 text-blue-600 inline-block px-1">{{ project.data.type }}</p></div>
-                        <vs-chip color="primary">
-                            Creared At: {{ moment(project.ts/1000).format('MMMM Do YYYY') }}
+                        <div class="font-semibold text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-base bg-blue text-white inline-block px-1">{{ project.data.type }}</p></div>
+                        <vs-chip color="primary" transparent>
+                            Creared At: {{ moment(project.data.created_at).format('MMMM Do YYYY') }} |
+                            {{  moment(project.data.created_at).fromNow()  }}
                         </vs-chip>
-                        <div>
-                            <vs-button @click="remove()" color="danger" size="small">Delete</vs-button>
-                        </div>
                     </div> 
                     <div class="">
-                        <vs-button @click="popupActivo=true" color="primary" type="border" class="w-full">Add New Payment</vs-button>
+                        <vs-button @click="popupActivo=true" color="primary" type="filled" class="w-full">Add New Payment</vs-button>
                         <vs-popup class="holamundo"  title="Add a new payment for your project" :active.sync="popupActivo">
                         <div>
                             <div class="flex flex-wrap">
@@ -67,19 +65,22 @@
                                      id="" type="text" placeholder="Received By" v-model="paymentReceivedBy">
                                      <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('paymentReceivedBy') }}</span>
                                 </div>
+                                <div class="w-full">
+                                    <label for="project-received-by" class="font-light text-base mb-2 text-gray-700">Date of Payment</label>
+                                    <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('date') ? 'border border-red-500' : '' "
+                                    name="date"
+                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                                     id="" type="date" placeholder="Received By" v-model="paymentDate">
+                                     <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('date') }}</span>
+                                </div>
                             </div>
                             <div class="float-right mt-4">
                                 <div class="">
-                                    <!-- <button @click="addPayment()" class="border-none bg-indigo-500 p-2 text-white font-thin text-lg rounded-sm align-middle shadow-lg hover:bg-indigo-600 hover:shadow-none">
-                                        Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner>
-                                    </button> -->
-                                    <vs-button @click="addPayment()" color="primary" type="filled">Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner></vs-button>
+                                    <vs-button @click.prevent="addPayment()" color="primary" type="filled">Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner></vs-button>
                                 </div>
                             </div> 
-
                         </div>
                         </vs-popup>
-                        
                         <!--  -->
                         <div class="mt-2 font-light items-end">
                             <div class="flex justify-between">
@@ -103,7 +104,6 @@
                     <div class="flex flex-wrap">
                         <div class="w-full md:w-1/2 px-4 pt-2 mt-2">
                             <p class="text-gray-700 text-2xl font-bold mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.081 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h10.483l.704-3h1.615l.704 3h10.483l.005-1.241c.001-2.52-.198-3.975-3.177-4.663zm-8.231 1.904h-1.164l-.91-2h2.994l-.92 2z"/></svg>
                                 Client Details
                             </p>
                             <p class="text-gray-700 text-base font-light">{{ project.data.client }} | {{ project.data.clientEmail }} </p>
@@ -113,31 +113,52 @@
                         <div class="w-full md:w-1/2 flex flex-wrap shadow-md mt-2 text-center m-auto">
                             <div class="w-1/3 bg-white p-2 border-l-4 border-blue">
                                     <p class="font-base text-base text-gray-500 mb-2">Estimated</p>
-                                <p class="font-bold text-xl text-blue mb-2">₹{{ project.data.cost }}</p>
+                                <p class="font-bold text-xl text-blue mb-2"> ₹{{ (project.data.cost)}}</p>
                             </div>
                             <div class="w-1/3 bg-white p-2 border-l-4 border-green-400">
                                     <p class="font-base text-base text-gray-500 mb-2">Received</p>
-                                <p class="font-bold text-xl text-green-500 mb-2">₹{{ project.data.totalReceived }}</p>
+                                <p class="font-bold text-xl text-green-500 mb-2">₹{{ (project.data.totalReceived) }}</p>
                             </div>
                             <div class="w-1/3 bg-white border-l-4 border-orange-400 p-2">
                                     <p class="font-base text-base text-gray-500 mb-2">Pending</p>
-                                <p class="font-bold text-xl text-orange-500 mb-2">₹{{ PendingAmount }}</p>
+                                <p class="font-bold text-xl text-orange-500 mb-2">₹{{ (PendingAmount).toLocaleString('en-IN') }}</p>
                             </div>
                         </div>  
                     </div>  
                 </div>
                 <!-- Payments -->
-                <div class="h-1 bg-gray-200 mt-4"></div>
-                 <div class="h-auto w-full mt-4">
-                     <p class="text-gray-700 text-2xl font-bold mb-2 mx-3">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path d="M20 11.999c1.654 0 3 1.347 3 3.001s-1.346 3-3 3-3-1.346-3-3 1.346-3.001 3-3.001zm0-1c-2.209 0-4 1.792-4 4.001s1.791 4 4 4 4-1.791 4-4-1.791-4.001-4-4.001zm.167 5.65v.351h-.334v-.333c-.344-.006-.702-.088-1-.242l.152-.548c.319.124.743.255 1.074.18.383-.086.462-.48.039-.67-.311-.145-1.26-.269-1.26-1.081 0-.455.346-.861.994-.95v-.356h.334v.339c.24.006.512.049.814.141l-.121.548c-.256-.089-.539-.171-.814-.153-.496.029-.541.459-.193.639.569.268 1.314.467 1.314 1.181.001.572-.446.877-.999.954zm-10.344-6.234c-.417-.216-.363-.731.232-.767.33-.021.67.078.977.186l.146-.659c-.363-.11-.688-.16-.978-.168v-.407h-.4v.427c-.778.107-1.193.594-1.193 1.14 0 .975 1.139 1.125 1.512 1.297.508.229.413.701-.047.805-.397.09-.906-.067-1.289-.216l-.183.657c.357.185.787.283 1.2.291v.399h.4v-.421c.663-.093 1.2-.459 1.2-1.147 0-.856-.893-1.096-1.577-1.417zm4.927 4.585c0-2.896 2.355-5.251 5.25-5.251v-4.749h-20v12h15.15c-.255-.617-.4-1.292-.4-2zm-4.75 0c-2.209 0-4-1.791-4-4s1.791-4.001 4-4.001 4 1.792 4 4.001-1.791 4-4 4z"/></svg>
-                         Payment Details
-                    </p>
-                     <PaymentCard :paymentData="projectPayments"/>
-                 </div>
+                <vs-divider></vs-divider>
+                <vs-tabs alignment="fixed">
+                    <vs-tab label="Payments">
+                        <div>
+                            <div class="h-auto w-full mt-4">
+                                <p class="text-gray-700 text-2xl font-bold mb-2 mx-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path d="M20 11.999c1.654 0 3 1.347 3 3.001s-1.346 3-3 3-3-1.346-3-3 1.346-3.001 3-3.001zm0-1c-2.209 0-4 1.792-4 4.001s1.791 4 4 4 4-1.791 4-4-1.791-4.001-4-4.001zm.167 5.65v.351h-.334v-.333c-.344-.006-.702-.088-1-.242l.152-.548c.319.124.743.255 1.074.18.383-.086.462-.48.039-.67-.311-.145-1.26-.269-1.26-1.081 0-.455.346-.861.994-.95v-.356h.334v.339c.24.006.512.049.814.141l-.121.548c-.256-.089-.539-.171-.814-.153-.496.029-.541.459-.193.639.569.268 1.314.467 1.314 1.181.001.572-.446.877-.999.954zm-10.344-6.234c-.417-.216-.363-.731.232-.767.33-.021.67.078.977.186l.146-.659c-.363-.11-.688-.16-.978-.168v-.407h-.4v.427c-.778.107-1.193.594-1.193 1.14 0 .975 1.139 1.125 1.512 1.297.508.229.413.701-.047.805-.397.09-.906-.067-1.289-.216l-.183.657c.357.185.787.283 1.2.291v.399h.4v-.421c.663-.093 1.2-.459 1.2-1.147 0-.856-.893-1.096-1.577-1.417zm4.927 4.585c0-2.896 2.355-5.251 5.25-5.251v-4.749h-20v12h15.15c-.255-.617-.4-1.292-.4-2zm-4.75 0c-2.209 0-4-1.791-4-4s1.791-4.001 4-4.001 4 1.792 4 4.001-1.791 4-4 4z"/></svg>
+                                    Payment Details
+                                </p>
+                                <PaymentCard :paymentData="projectPayments"/>
+                            </div>
+                        </div>
+                    </vs-tab>
+                    <vs-tab label="Feedback/Requirements">
+                        <div>
+                            <div class="h-auto w-full mt-4">
+                                <div>
+                                    <!-- <Feedback :projectId="id" @call-getAll="faunaGetByProjectId()"/> -->
+                                    <Feedback :projectId="id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-tab>
+                </vs-tabs>
             </div>
-            <div class="w-full md:w-1/4 bg-gray-300 h-screen p-4 text-sm overflow-y-auto">
-                <span class="text-gray-600 font-semibold text-xl">Activiy</span>
+            <div class="w-full md:w-1/4 bg-gray-300 h-auto p-4 text-sm overflow-y-auto">
+                <div class="flex justify-between">
+                    <p><span class="text-gray-600 font-semibold text-xl">Activiy</span></p>
+                    <div>
+                        <vs-button @click="remove()" color="danger" size="small">Delete Project</vs-button>
+                    </div>
+                </div>
                 <div class="text-orange-500 text-base" v-if="events==null">Loading Data</div>
                 <div v-else>
                     <Events  :events="events"/>
@@ -151,7 +172,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import Events from '../Ortigan/Events'
 import { appMixin } from '../../mixins.js'
+import { userMixin } from '../../userStateMixin.js'
 import PaymentCard from '../Ortigan/PaymentCard'
+import Feedback from '../Ortigan/Feedback'
+import Header from './Header'
 var moment = require('moment');
 
 // Fauna setup
@@ -160,11 +184,13 @@ const client = new faunadb.Client({secret: process.env.VUE_APP_FAUNA_SECRET})
 const q = faunadb.query
 
 export default {
-    mixins: [appMixin],
+    mixins: [appMixin, userMixin],
     props:['id'],
     components:{
+        Header,
         PaymentCard,
-        Events
+        Events,
+        Feedback
     },
     data(){
         return{
@@ -172,11 +198,14 @@ export default {
             project: [],
             events: [],
             projectPayments: [],
+            projectFeedbacks: [],
             totalReceived: '',
             selectedStatus: '',
             loading: false,
             loading2: false,
             popupActivo:false,
+
+            user :this.$store.state.user.name,
 
             paymentMethods: {
                 1: 'Cash',
@@ -197,7 +226,8 @@ export default {
             paymentCost: '',
             paymentBy: '',
             paymentMethod: '',
-            paymentReceivedBy: ''
+            paymentReceivedBy: '',
+            paymentDate: '',
         }
     },
     created(){
@@ -225,7 +255,7 @@ export default {
                         // this.events.pop()
                         this.events.reverse()
                     })
-                    // 
+                    //Get payments 
                     client.query(q.Paginate(q.Match(q.Index('payment_by_project'), this.project.ref.id)))
                     .then(res => {
                         var x = res.data
@@ -233,9 +263,24 @@ export default {
                             return q.Get(ref)
                         })
                         client.query(data).then(res => {
+                            // console.log("[PAYMENTS] ", res)
                             this.projectPayments = res
                         })
                     })
+                    //Get Feedbacks
+                    client.query(q.Paginate(q.Match(q.Index('feedback_by_project'), this.project.ref.id)))
+                    .then(res => {
+                        var x = res.data
+                        const data = x.map(ref => {
+                            return q.Get(ref)
+                        })
+                        client.query(data).then(res => {
+                            // console.log("[FEEDBACKS] ",res)
+                            this.projectFeedbacks = res
+                        })
+                    })
+
+                    
                 })
         },
         addEvent(){
@@ -265,10 +310,11 @@ export default {
             this.paymentData = {
                 "projectId": this.project.ref.id,
                 "paymentDescription": this.paymentDesc,
-                "paymentCost": this.paymentCost,
+                "paymentCost": parseInt(this.paymentCost),
                 "paymentBy": this.paymentBy,
                 "paymentMethod": this.paymentMethod,
                 "paymentReceivedBy": this.paymentReceivedBy,
+                "paymentDate" : this.paymentDate,
                 "at": moment().format('MMMM Do YYYY, h:mm:ss a')
             }
             this.paymentObj = {
@@ -372,7 +418,7 @@ export default {
                 color = 'primary'
             }
             return color
-        }
+        },
     }
 }
 </script>

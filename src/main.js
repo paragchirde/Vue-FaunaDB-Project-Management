@@ -20,15 +20,36 @@ import { VueMasonryPlugin } from 'vue-masonry';
 import "vue-toastification/dist/index.css";
 import './assets/tailwind.css'
 
+import VTooltip from 'v-tooltip'
 
-Vue.config.productionTip = false
+Vue.use(VTooltip)
+
+
+Vue.config.productionTip = true
 Vue.use(Toast)
 Vue.use(VeeValidate);
 Vue.use(VueMasonryPlugin)
 
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (localStorage.getItem('token') == null) {
+            next({
+                path: '/ortigan/login',
+                query: { redirect: to.fullPath }
+            })
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
+})
 
 new Vue({
     router,
     store,
+    created() {
+
+    },
     render: h => h(App)
 }).$mount('#app')

@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full bg-gray-200 p-4">
             <div class="" v-for="(payment, index) in paymentData" :key="index">
-                <div class="bg-gray-100 p-2 text-gray-700 shadow-md mt-4">
+                <div class="bg-white  rounded-lg p-2 text-gray-700 shadow-md mt-4">
                     <div class="flex justify-between">
                         <div>
-                            <vs-chip color="primary">
+                            <vs-chip transparent color="primary">
                                 {{ moment(payment.ts/1000).format('MMMM Do YYYY, h:mm:ss a') }}
                             </vs-chip>
                         </div>

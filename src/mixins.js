@@ -3,11 +3,13 @@
 
      },
      methods: {
-         showToast(message, type) {
-             this.$toast(message, {
-                 timeout: 2000,
-                 type: type
-             });
+         showToast(title, description, type) {
+             this.$vs.notify({
+                 title: title,
+                 text: description,
+                 color: type,
+                 position: 'top-right'
+             })
          }
      }
  }

@@ -3,8 +3,10 @@
         <div class="w-full bg-gray-300 h-screen">
             <div class="container mx-auto h-full flex justify-center items-center">
                 <div class="w-1/3">
-                    <h2 class="font-light mb-4 text-center text-gray-600">Register to our website</h2>
-                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div class="text-center mb-4">
+                        <p class="text-blue font-semibold text-3xl">Ortigan | <span class="font-base text-base"> Project Management</span> </p>
+                    </div>
+                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-t-4 border-blue">
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-light mb-2" for="name">
                                 Name
@@ -39,10 +41,10 @@
                                 type="button" aria-disabled="true">
                                 Sign In
                             </button> -->
-                            <b-button :disabled="!validateForm" variant="primary" @click.prevent="createUser()">Register</b-button>
-                            <a class="inline-block align-baseline font-light text-sm text-blue-500 hover:text-blue-800" href="#">
-                                Forgot Password?
-                            </a>
+                            <router-link :to="{ name:'ortigan-project-login' }">
+                                    Login
+                            </router-link>
+                            <vs-button :disabled="!validateForm" variant="primary" @click.prevent="createUser()">Register</vs-button>
                         </div>
                     </form>
                     <p class="text-center text-gray-500 text-xs">
@@ -92,10 +94,38 @@ export default {
             )
             .then((ret) => {
                 console.log(ret)
-                this.showToast('User Added', 'success')
+                this.loginUser()
+                
             })
             .catch(err => {
                 console.log(err)
+            })
+        },
+        loginUser(){
+            client.query(
+                q.Login(
+                    q.Match(q.Index("user_by_email"), this.email),
+                    { password: this.password }
+                )
+            )
+            .then(res => {
+                this.token = res.secret
+                if(this.token!=null){
+                    localStorage.setItem('token', this.token)
+                    client.query(q.Get(q.Ref(q.Collection('users'), res.instance.value.id)))
+                    .then(res => {
+                        localStorage.setItem('user', res.data)
+                        this.$store.state.user = res.data
+                        this.showToast('Success', '', 'success')
+                        this.$router.push({name:'ortigan-dashboard'})
+                    })
+                } else {
+                    console.log("Error")
+                }   
+            })
+            .catch(err => {
+                console.log(err)
+                
             })
         }
     },
