@@ -8,15 +8,16 @@
                     <vs-button type="border" size="small"
                     >Dashboard</vs-button>
                 </router-link>
-                <div class="flex justify-between">
+                <div class="flex justify-between flex-wrap">
                     <div>   
-                        <div class="font-semibold text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-base bg-blue text-white inline-block px-1">{{ project.data.type }}</p></div>
+                        <div class="font-semibold text-xl md:text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-base bg-blue text-white inline-block px-1">{{ project.data.type }}</p></div>
                         <vs-chip color="primary" transparent>
                             Creared At: {{ moment(project.data.created_at).format('MMMM Do YYYY') }} |
                             {{  moment(project.data.created_at).fromNow()  }}
                         </vs-chip>
                     </div> 
-                    <div class="">
+                    <vs-divider class="block md:hidden "></vs-divider>
+                    <div class="flex items-center flex-wrap">
                         <vs-button @click="popupActivo=true" color="primary" type="filled" class="w-full">Add New Payment</vs-button>
                         <vs-popup class="holamundo"  title="Add a new payment for your project" :active.sync="popupActivo">
                         <div>
@@ -82,7 +83,7 @@
                         </div>
                         </vs-popup>
                         <!--  -->
-                        <div class="mt-2 font-light items-end">
+                        <div class="mt-2 font-light items-end w-full">
                             <div class="flex justify-between">
                                 <p>Status</p>
                                 <p>
@@ -90,7 +91,7 @@
                                 </p>
                             </div>
                             <vs-select
-                            class="selectExample"
+                            class="selectExample w-full"
                             v-model="selectedStatus"
                             @change="updateStatus()"
                              icon="arrow_downward"
@@ -100,8 +101,9 @@
                         </div>
                     </div> 
                 </div>
+                <vs-divider class="block md:hidden "></vs-divider>
                 <div class="mt-4">
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap justify-between">
                         <div class="w-full md:w-1/2 px-4 pt-2 mt-2">
                             <p class="text-gray-700 text-2xl font-bold mb-2">
                                 Client Details
@@ -111,15 +113,15 @@
                         </div>
                         <!-- Total -->
                         <div class="w-full md:w-1/2 flex flex-wrap shadow-md mt-2 text-center m-auto">
-                            <div class="w-1/3 bg-white p-2 border-l-4 border-blue">
+                            <div class="w-full md:w-1/3 bg-white p-2 border-l-4 border-blue">
                                     <p class="font-base text-base text-gray-500 mb-2">Estimated</p>
                                 <p class="font-bold text-xl text-blue mb-2"> ₹{{ (project.data.cost)}}</p>
                             </div>
-                            <div class="w-1/3 bg-white p-2 border-l-4 border-green-400">
+                            <div class="w-full md:w-1/3 bg-white p-2 border-l-4 border-green-400">
                                     <p class="font-base text-base text-gray-500 mb-2">Received</p>
                                 <p class="font-bold text-xl text-green-500 mb-2">₹{{ (project.data.totalReceived) }}</p>
                             </div>
-                            <div class="w-1/3 bg-white border-l-4 border-orange-400 p-2">
+                            <div class="w-full md:w-1/3 bg-white border-l-4 border-orange-400 p-2">
                                     <p class="font-base text-base text-gray-500 mb-2">Pending</p>
                                 <p class="font-bold text-xl text-orange-500 mb-2">₹{{ (PendingAmount).toLocaleString('en-IN') }}</p>
                             </div>

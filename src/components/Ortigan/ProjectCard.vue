@@ -2,7 +2,7 @@
     <div>
         <div class="max-w-sm rounded overflow-hidden shadow-lg border-t-4 border-blue p-4">
             <div class="">
-                <p class="text-xs bg-blue text-white inline-block px-1">Static</p>
+                <p class="text-xs bg-blue text-white inline-block px-1">{{ data.data.type }}</p>
                 <div class="flex justify-between">
                     <div class="font-semibold text-base mb-2 text-gray-700">
                         {{ data.data.name }}

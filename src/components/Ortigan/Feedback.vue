@@ -1,9 +1,9 @@
 <template>
     <div class="text-base font-normal bg-gray-100 p-4">
         <div class="flex justify-between">
-            <div>        
+            <div class="hidden md:block">        
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 22v-16h16v7.543c0 4.107-6 2.457-6 2.457s1.518 6-2.638 6h-7.362zm18-7.614v-10.386h-20v20h10.189c3.163 0 9.811-7.223 9.811-9.614zm-10 1.614h-5v-1h5v1zm5-4h-10v1h10v-1zm0-3h-10v1h10v-1zm2-7h-19v19h-2v-21h21v2z"/></svg>
-                Feedback/Requirements  | {{ user }}
+                Feedback/Requirements
             </div>
             <div>
                 <vs-button @click="popupActivoFeedback=true" color="primary" type="filled" class="w-full">Add New Issue</vs-button>
@@ -28,11 +28,22 @@
                         </div>
                         <div class="w-full">
                             <label for="issue-assign-to" class="font-light text-base mb-2 text-gray-700">Assign To</label>
+                            <vs-select
+                            class=" w-full bg-gray-200 text-gray-800"
+                            v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('name') ? 'border border-red-500' : '' "
+                            name="name"
+                            v-model="feedbackAssignedTo"
+                            icon="arrow_downward"
+                            >
+                            <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in team" />
+                            </vs-select>
+                            <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span>
+                            <!-- <label for="issue-assign-to" class="font-light text-base mb-2 text-gray-700">Assign To</label>
                             <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('name') ? 'border border-red-500' : '' "
                             name="name"
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                             id="" type="text" placeholder="Name of the person who will work on the issue" v-model="feedbackAssignedTo">
-                            <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span>
+                            <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span> -->
                         </div>  
                     </div>
                     <div class="float-right mt-4">
@@ -44,21 +55,6 @@
                 </vs-popup>
             </div>
         </div>
-        <!-- <vs-list>
-            <vs-list-header title="Issues"></vs-list-header>
-            <div v-for="feedback in  projectFeedbacks" :key="feedback.id">
-                <vs-list-item :title="feedback.data.title" :subtitle="feedback.data.description" >  
-                    <div>
-                        <vs-button color="success" type="border" class="mr-2" size="small" v-if="feedback.data.completed == true">
-                             Completed
-                        </vs-button>
-                        <vs-button color="primary" class="mr-2" size="small" v-else @click.prevent="markFeedbackAsDone(feedback.ref.id, feedback.data.title)">Done</vs-button>
-                        <vs-button color="warning" size="small" @click.prevent="removeFeedback(feedback.ref.id)">Remove</vs-button>
-                    </div>
-                    <vs-chip :color="feedback.data.completed == true ? 'success' : 'primary'"  class="mt-1 w-full" transparent>{{ feedback.data.assignedTo }}</vs-chip>
-                </vs-list-item>
-            </div>
-        </vs-list> -->
         <table class="table-auto w-full mt-4">
             <thead class="bg-blue text-white">
                 <tr>
@@ -123,7 +119,16 @@ export default {
             feedbackObj: {},
             projectFeedbacks: [],
 
-            updateText: ''
+            updateText: '',
+
+            team:[
+                {text:'Aniket Hake',value:"Aniket Hake"},
+                {text:'Aditya Deshlahara',value:"Aditya Deshlahara"},
+                {text:'Jaideep Khedekar',value:"Jaideep Khedekar"},
+                {text:'Shubham Padamwar',value:"Shubham Padamwar"},
+                {text:'Vinayak Kalushe',value:"Vinayak Kalushe"},
+                {text:'Parag Chirde',value:"Parag Chirde"},
+            ],
         }
     },
     created()   {

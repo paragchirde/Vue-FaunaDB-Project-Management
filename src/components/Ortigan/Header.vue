@@ -2,9 +2,8 @@
     <div>
         <div  class="bg-blue p-2 px-4 text-white text-2xl font-base">
             <div class="flex justify-between">
-                <p>Ortigan | <span class="font-base text-base"> Project Management</span> </p>
+                <p>Ortigan | <span class="font-base text-base "> Project Management</span> </p>
                 <div class="text-base align-middle mt-2" v-if="check">
-                    Hello, {{ this.$store.state.user.name }}
                     <vs-button @click="logout()" color="warning" size="small">Logout</vs-button>
                 </div>
             </div>

@@ -3,6 +3,7 @@
         <Header/>
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/3 bg-gray-100 p-8">
+            <p class="bg-blue-light rounded-full p-2 text-blue text-center font-mono">Hello, {{ this.$store.state.user.name }}</p>
                 <p class="font-semibold text-3xl text-gray-700 mb-2 text-center">Start a new project</p>
                 <div class="bg-white h-auto w-auto mt-6 rounded-sm p-8 shadow border-t-4 border-blue">
                     <div>
@@ -69,10 +70,11 @@
                 </div>
             </div>
             <div class="w-full md:w-2/3 bg-white p-8">
+            <div class="flex justify-between">
                 <p class="font-semibold text-3xl text-gray-700 mb-2">List of projects</p>
-                hola, {{ user }}
+            </div>
                 <div>        
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                         <div class="" v-for="(project,index) in allProjects" :key="index">
                             <ProjectCard :data="project" class="mt-6" />
                         </div>
