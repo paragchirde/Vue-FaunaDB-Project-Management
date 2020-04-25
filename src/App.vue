@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import Footer from './components/Ortigan/Footer'
+import Footer from './components/Components/Footer'
 // import Header from './components/Ortigan/Header'
 export default {
   components: {

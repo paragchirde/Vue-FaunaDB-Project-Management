@@ -88,7 +88,7 @@
 import { appMixin } from '../../mixins.js'
 import { userMixin } from '../../userStateMixin.js'
 var moment = require('moment');
-import ProjectCard from '../Ortigan/ProjectCard'
+import ProjectCard from '../Components/ProjectCard'
 import Header from './Header'
 
  

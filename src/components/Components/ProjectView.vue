@@ -4,7 +4,7 @@
         <div v-if="loading">Loading Data....</div>
         <div v-else class="flex flex-wrap">
             <div class="w-full md:w-3/4 p-12">
-                <router-link :to="{ name:'ortigan-dashboard' }">
+                <router-link :to="{ name:'dashboard' }">
                     <vs-button type="border" size="small"
                     >Dashboard</vs-button>
                 </router-link>
@@ -172,11 +172,11 @@
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import Events from '../Ortigan/Events'
+import Events from '../Components/Events'
 import { appMixin } from '../../mixins.js'
 import { userMixin } from '../../userStateMixin.js'
-import PaymentCard from '../Ortigan/PaymentCard'
-import Feedback from '../Ortigan/Feedback'
+import PaymentCard from '../Components/PaymentCard'
+import Feedback from '../Components/Feedback'
 import Header from './Header'
 var moment = require('moment');
 

@@ -122,12 +122,12 @@ export default {
             updateText: '',
 
             team:[
-                {text:'Aniket Hake',value:"Aniket Hake"},
-                {text:'Aditya Deshlahara',value:"Aditya Deshlahara"},
-                {text:'Jaideep Khedekar',value:"Jaideep Khedekar"},
-                {text:'Shubham Padamwar',value:"Shubham Padamwar"},
-                {text:'Vinayak Kalushe',value:"Vinayak Kalushe"},
-                {text:'Parag Chirde',value:"Parag Chirde"},
+                {text:'Richard',value:"Richard"},
+                {text:'Jared',value:"Jared"},
+                {text:'Monica',value:"Monica"},
+                {text:'Gilfoyle',value:"Gilfoyle"},
+                {text:'Dinesh',value:"Dinesh"},
+                {text:'Erlich',value:"Erlich"},
             ],
         }
     },

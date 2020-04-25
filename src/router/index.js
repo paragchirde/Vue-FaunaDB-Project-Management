@@ -3,41 +3,41 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 //ortigan
-import OrtiganDashboard from '../components/Ortigan/Dashboard.vue'
-import OrtiganProjectView from '../components/Ortigan/ProjectView.vue'
-import OrtiganLogin from '../components/Ortigan/Auth/Login.vue'
-import OrtiganRegister from '../components/Ortigan/Auth/Register.vue'
+import Dashboard from '../components/Components/Dashboard.vue'
+import ProjectView from '../components/Components/ProjectView.vue'
+import Login from '../components/Components/Auth/Login.vue'
+import Register from '../components/Components/Auth/Register.vue'
 
 const routes = [
     // Ortigan
     {
         path: '/',
-        name: 'ortigan-dashboard',
-        component: OrtiganDashboard,
+        name: 'dashboard',
+        component: Dashboard,
         props: true,
         meta: {
             requiresAuth: true
         }
     },
     {
-        path: '/ortigan/project/:id',
+        path: '/project/:id',
         name: 'project-view',
-        component: OrtiganProjectView,
+        component: ProjectView,
         props: true,
         meta: {
             requiresAuth: true
         }
     },
     {
-        path: '/ortigan/login',
-        name: 'ortigan-project-login',
-        component: OrtiganLogin,
+        path: '/login',
+        name: 'project-login',
+        component: Login,
         props: true
     },
     {
-        path: '/ortigan/register',
-        name: 'ortigan-project-register',
-        component: OrtiganRegister,
+        path: '/register',
+        name: 'project-register',
+        component: Register,
     },
 
 ]

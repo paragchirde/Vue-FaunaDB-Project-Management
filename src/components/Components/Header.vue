@@ -2,7 +2,7 @@
     <div>
         <div  class="bg-blue p-2 px-4 text-white text-2xl font-base">
             <div class="flex justify-between">
-                <p>Ortigan | <span class="font-base text-base "> Project Management</span> </p>
+                <p>Project Management | <span class="font-base text-base "> Beta</span> </p>
                 <div class="text-base align-middle mt-2" v-if="check">
                     <vs-button @click="logout()" color="warning" size="small">Logout</vs-button>
                 </div>
@@ -24,7 +24,7 @@ export default {
                     localStorage.removeItem('token')
                     localStorage.removeItem('userId')
                     localStorage.removeItem('user')
-                    this.$router.push({name:'ortigan-project-login'})
+                    this.$router.push({name:'project-login'})
                 })
                 .catch(err => {
                     console.log(err)
