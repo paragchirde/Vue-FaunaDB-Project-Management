@@ -2,6 +2,7 @@
 node_modules
 /dist
 
+# /src/views/Users.vue
 # local env files
 
 

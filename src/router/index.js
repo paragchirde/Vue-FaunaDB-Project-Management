@@ -8,6 +8,8 @@ import ProjectView from '../components/Components/ProjectView.vue'
 import Login from '../components/Components/Auth/Login.vue'
 import Register from '../components/Components/Auth/Register.vue'
 
+import Users from '../views/Users.vue'
+
 const routes = [
     // Ortigan
     {
@@ -39,6 +41,11 @@ const routes = [
         name: 'project-register',
         component: Register,
     },
+    {
+        path: '/users',
+        name: 'users',
+        component: Users
+    }
 
 ]
 

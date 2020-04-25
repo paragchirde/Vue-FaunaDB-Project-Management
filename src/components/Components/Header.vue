@@ -4,7 +4,10 @@
             <div class="flex justify-between">
                 <p>Project Management | <span class="font-base text-base "> Beta</span> </p>
                 <div class="text-base align-middle mt-2" v-if="check">
+                    <div class="flex">
+                    <img :src="`https://avatars.dicebear.com/v2/bottts/${this.$store.state.user.name}.svg`" class="h-10 w-10 mr-2" /> 
                     <vs-button @click="logout()" color="warning" size="small">Logout</vs-button>
+                    </div>
                 </div>
             </div>
         </div>
