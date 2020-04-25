@@ -122,8 +122,15 @@
                                 <p class="font-bold text-xl text-green-500 mb-2">₹{{ (project.data.totalReceived) }}</p>
                             </div>
                             <div class="w-full md:w-1/3 bg-white border-l-4 border-orange-400 p-2">
+                                <div  v-if="PendingAmount > 0">
                                     <p class="font-base text-base text-gray-500 mb-2">Pending</p>
-                                <p class="font-bold text-xl text-orange-500 mb-2">₹{{ (PendingAmount).toLocaleString('en-IN') }}</p>
+                                    <p class="font-bold text-xl text-orange-500 mb-2">₹{{ (PendingAmount).toLocaleString('en-IN') }}</p>
+                                </div>
+                                <div v-else>
+                                    <p class="font-base text-base text-gray-500 mb-2">Pending - ₹0</p>
+                                    <p class="font-light text-sm text-green-700">Additional Received</p>
+                                    <p class="font-bold text-sm text-green-400 mb-2">+ ₹{{ Math.abs(PendingAmount) }}</p>
+                                </div>
                             </div>
                         </div>  
                     </div>  
