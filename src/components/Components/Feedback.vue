@@ -128,6 +128,7 @@ export default {
                 {text:'Gilfoyle',value:"Gilfoyle"},
                 {text:'Dinesh',value:"Dinesh"},
                 {text:'Erlich',value:"Erlich"},
+                {text:'Self',value:"Self"},
             ],
         }
     },

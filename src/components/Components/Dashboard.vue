@@ -3,12 +3,12 @@
         <Header/>
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/3 bg-gray-100 p-8">
-            <p class="bg-blue-light rounded-full p-2 text-blue text-center font-mono">Hello,  {{ this.$store.state.user.name }}</p>
+            <p class="bg-blue-light rounded-full p-2 text-blue text-center font-mono">Hello,  {{ currentUser }}</p>
                 <p class="font-semibold text-3xl text-gray-700 mb-2 text-center">Start a new project</p>
                 <div class="bg-white h-auto w-auto mt-6 rounded-sm p-8 shadow border-t-4 border-blue">
                     <div>
                         <div class="flex flex-wrap">
-                            <div>
+                            <div class="w-full">
                                 <label for="project-name" class="font-light text-base mb-2 text-gray-700">Enter the name of project</label>
                                 <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('title') ? 'border border-red-500' : '' "
                                 name="title"
@@ -16,7 +16,7 @@
                                 id="inline-full-name" type="text" placeholder="Project Name" v-model="projectName">
                                 <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('title') }}</span>
                             </div>
-                            <div class="mt-2">
+                            <div class="mt-2 w-full">
                                 <label for="client-name" class="font-light text-base mb-2 text-gray-700">Enter the name of Client</label>
                                 <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('client') ? 'border border-red-500' : '' "
                                 name="client"
@@ -24,7 +24,7 @@
                                 id="inline-client-name" type="text" placeholder="Client Name" v-model="projectClient">
                                 <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('client') }}</span>
                             </div>
-                            <div class="mt-2">
+                            <div class="mt-2 w-full">
                                 <label for="client-number" class="font-light text-base mb-2 text-gray-700">Enter the contact number of Client</label>
                                 <input v-validate="'required|max:10'" data-vv-validate-on="blur" :class="errors.first('contact') ? 'border border-red-500' : '' "
                                 name="contact"
@@ -32,7 +32,7 @@
                                 id="inline-client-contact" type="number" placeholder="Client Contact" v-model="projectClientContact">
                                  <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('contact') }}</span>
                             </div>
-                            <div class="mt-2">
+                            <div class="mt-2 w-full">
                                 <label for="client-email" class="font-light text-base mb-2 text-gray-700">Enter the email of Client</label>
                                 <input  v-validate="'required|email'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                 name="email"
@@ -40,7 +40,7 @@
                                 id="inline-client-email" type="email" placeholder="Client Email" v-model="projectClientEmail">
                                  <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('email') }}</span>
                             </div>
-                            <div class="mt-2">
+                            <div class="mt-2 w-full">
                                 <label for="project-cost" class="font-light text-base mb-2 text-gray-700">Enter the Estimated Cost</label>
                                 <input  v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('cost') ? 'border border-red-500' : '' "
                                 name="cost"
@@ -122,7 +122,7 @@ export default {
             projectObj: {
             },
 
-            user :this.$store.state.user.name
+            user :this.currentUser
 
         }
     },
@@ -131,7 +131,7 @@ export default {
     },
     methods:{
         getAll(){
-            client.query(q.Paginate(q.Match(q.Index('all_projects'))))
+            client.query(q.Paginate(q.Match(q.Index('project_by_email'), this.$store.state.user.email)))
             .then(res => {
                 var x = res.data
                 const data = x.map(ref => {
@@ -141,16 +141,6 @@ export default {
                     this.allProjects = res
                 })
             })
-        },
-         faunaGetByProjectName(){
-                client.query(q.Get(q.Match(q.Index('project_by_name'), 'Demo')))
-                .then(res => {
-                    this.allProjects = res.data
-                })
-                . catch(err => {
-                    console.log(err.name)
-                    this.ipStatus = 'not exists'
-                })
         },
         create(){
             this.$vs.loading({})
@@ -165,7 +155,7 @@ export default {
                 "totalReceived": 0,
                 "update": 'Project Created',
                 "created_at": Date.now(),
-                "created_by": this.user
+                "created_by": this.$store.state.user.email
             }
             this.projectObj = {
                 data: this.projectData
@@ -198,26 +188,15 @@ export default {
             this.projectCost = '',
             this.projectType = ''
         },
-        
-
     },
     computed: {
         validateForm() {
             console.log(this.errors.any())
             return !this.errors.any() && this.projectName != "" && this.projectClient != "" && this.projectClientContact != "" && this.projectClientEmail != "" && this.projectCost != "" && this.projectType != "";
         },
+        currentUser(){
+            return this.$store.state.user.name
+        }
     },
 }
 </script>
-
-<style>
-
-#div-with-loading{
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  box-shadow: 0px 3px 10px 0px rgba(0,0,0,.1)
-}
-</style>

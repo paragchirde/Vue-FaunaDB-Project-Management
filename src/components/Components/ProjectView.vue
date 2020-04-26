@@ -77,7 +77,7 @@
                             </div>
                             <div class="float-right mt-4">
                                 <div class="">
-                                    <vs-button @click.prevent="addPayment()" color="primary" type="filled">Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner></vs-button>
+                                    <vs-button @click.prevent="addPayment()" color="primary" type="filled">Add New</vs-button>
                                 </div>
                             </div> 
                         </div>
@@ -249,14 +249,13 @@ export default {
                 q.Get(q.Ref(q.Collection('projects'), this.id))
                 )
                 .then(res => {
-                    this.loading = false
-                    this.project = res
-                    this.totalReceived = res.data.totalReceived
-                    this.selectedStatus = res.data.status
-                })
-                .then(() => {
-                    //Get Events
-                    client.query(
+                    if(res.data.created_by == this.$store.state.user.email){
+                        this.loading = false
+                        this.project = res
+                        this.totalReceived = res.data.totalReceived
+                        this.selectedStatus = res.data.status
+
+                         client.query(
                     q.Paginate(q.Events(q.Ref(q.Collection('projects'), this.project.ref.id)))
                     ).then((ret) => {
                         // console.log("[EVENTS] ",ret)
@@ -289,8 +288,12 @@ export default {
                         })
                     })
 
-                    
+                    } else {
+                        console.log('OKAY NOT USER')
+                        this.$router.push({name : 'dashboard'})
+                    }
                 })
+                
         },
         addEvent(){
                 client.query(
@@ -315,7 +318,6 @@ export default {
                 })
         },
         addPayment(){
-            this.loading2 = true
             this.paymentData = {
                 "projectId": this.project.ref.id,
                 "paymentDescription": this.paymentDesc,
@@ -329,27 +331,23 @@ export default {
             this.paymentObj = {
                 data: this.paymentData
             }
-            console.log(this.paymentObj)
             client.query(
             q.Create(
                 q.Collection('payments'), this.paymentObj
             )
             )
-            .then((ret) => {
-                console.log(ret)
+            .then(() => {
                 this.popupActivo=false,
-                this.showToast('Payment Added', 'success')
+                this.showToast('Payment Added','Payment Successfully added to the project', 'success')
             })
             .then(() => {
                 this.updateTotal()
             })
             .then(() => {
                 this.faunaGetByProjectId()
-                this.loading2 = false
             })
             .catch(err => {
                 console.log(err)
-                 this.loading2 = false
                  this.showToast('Error', 'danger')
             })
         },
@@ -366,9 +364,6 @@ export default {
                     }
                     )
             )
-            .then(res => {
-                console.log("[UPDATE TOTAL:] ", res)
-            })
         },
         updateStatus(){
             client.query(
@@ -383,8 +378,7 @@ export default {
                     }
                     )
             )
-            .then(res => {
-                console.log("[UPDATE Status:] ", res)
+            .then(() => {
                 this.faunaGetByProjectId()
             })
         },
@@ -396,7 +390,7 @@ export default {
             )
             .then((ret) => {
                 console.log(ret)
-                this.$router.push({name:'ortigan-dashboard'})
+                this.$router.push({name:'dashboard'})
             })
         },
         clearFields(){

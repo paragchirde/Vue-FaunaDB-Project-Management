@@ -9,11 +9,23 @@
 </template>
 <script>
 import Footer from './components/Components/Footer'
-// import Header from './components/Ortigan/Header'
+
+const faunadb = require('faunadb')
+const client = new faunadb.Client({secret: process.env.VUE_APP_FAUNA_SECRET})
+const q = faunadb.query
 export default {
   components: {
     // Header,
     Footer
+  },
+  created(){
+    if(localStorage.getItem('token') != null){
+      client.query(q.Get(q.Match(q.Index('user_by_token'), localStorage.getItem('token'))))
+      .then(res => {
+        this.$store.state.user  = res.data
+        localStorage.setItem('user', JSON.stringify(res.data))
+      })
+    }
   }
 }
 </script>

@@ -84,15 +84,13 @@ export default {
                     credentials: {password: this.password},
                     data:{
                         name: this.name,
-                        email: this.email
+                        email: (this.email).toLowerCase()
                     }
                 }
             )
             )
-            .then((ret) => {
-                console.log(ret)
-                this.loginUser()
-                
+            .then(() => {
+                this.loginUser() 
             })
             .catch(err => {
                 console.log(err)
@@ -102,7 +100,7 @@ export default {
             this.$vs.loading({})
             client.query(
                 q.Login(
-                    q.Match(q.Index("user_by_email"), this.email),
+                    q.Match(q.Index("user_by_email"), (this.email).toLowerCase()),
                     { password: this.password }
                 )
             )
@@ -110,21 +108,29 @@ export default {
                 this.token = res.secret
                 if(this.token!=null){
                     localStorage.setItem('token', this.token)
-                    client.query(q.Get(q.Ref(q.Collection('users'), res.instance.value.id)))
-                    .then(res => {
-                        localStorage.setItem('user', JSON.stringify(res.data))
-                        this.$store.state.user = res.data
-                        this.showToast('Success', '', 'success')
-                        this.$vs.loading.close()
-                        this.$router.push({name:'dashboard'})
-                    })
+                        client.query(
+                            q.Update(
+                                q.Ref(q.Collection('users'), res.instance.value.id),
+                                {
+                                    data: {
+                                        token: this.token
+                                    }
+                                }
+                                )
+                        )
+                        .then(res => {
+                            this.$store.state.user  = res.data
+                            localStorage.setItem('user', JSON.stringify(res.data))
+                            this.$vs.loading.close()
+                            this.$router.push({name:'dashboard'})
+                        })
                 } else {
                     console.log("Error")
+                    this.showToast('Error', 'Some error occured. Please try again.', 'danger')
                 }   
             })
             .catch(err => {
                 console.log(err)
-                
             })
         }
     },
