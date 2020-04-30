@@ -1,21 +1,22 @@
 <template>
   <div id="app">
     <div>
-    <!-- <Header/> -->
+    <Header/>
       <router-view></router-view>
     </div>
     <Footer/>
   </div>
 </template>
 <script>
-import Footer from './components/Components/Footer'
+import Footer from './components/VueFauna/Footer'
+import Header from './components/VueFauna/Header'
 
 const faunadb = require('faunadb')
 const client = new faunadb.Client({secret: process.env.VUE_APP_FAUNA_SECRET})
 const q = faunadb.query
 export default {
   components: {
-    // Header,
+    Header,
     Footer
   },
   created(){

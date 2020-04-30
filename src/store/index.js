@@ -5,7 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        user: []
+        user: [],
+        workspaces: [],
+        currentK: ''
     },
     mutations: {},
     actions: {},

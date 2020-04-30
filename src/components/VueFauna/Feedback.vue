@@ -38,12 +38,6 @@
                             <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in team" />
                             </vs-select>
                             <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span>
-                            <!-- <label for="issue-assign-to" class="font-light text-base mb-2 text-gray-700">Assign To</label>
-                            <input v-validate="'required'" data-vv-validate-on="blur" :class="errors.first('name') ? 'border border-red-500' : '' "
-                            name="name"
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-500 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                            id="" type="text" placeholder="Name of the person who will work on the issue" v-model="feedbackAssignedTo">
-                            <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span> -->
                         </div>  
                     </div>
                     <div class="float-right mt-4">
@@ -122,13 +116,12 @@ export default {
             updateText: '',
 
             team:[
-                {text:'Richard',value:"Richard"},
-                {text:'Jared',value:"Jared"},
-                {text:'Monica',value:"Monica"},
-                {text:'Gilfoyle',value:"Gilfoyle"},
+                {text:'Richard Hendricks',value:"Richard Hendricks"},
+                {text:'Jared Dunn',value:"Jared Dunn"},
+                {text:'Monika',value:"Monika"},
+                {text:'Erlich Bachman',value:"Erlich Bachman"},
                 {text:'Dinesh',value:"Dinesh"},
-                {text:'Erlich',value:"Erlich"},
-                {text:'Self',value:"Self"},
+                {text:'Gilfoyle',value:"Gilfoyle"},
             ],
         }
     },
@@ -144,28 +137,24 @@ export default {
                     return q.Get(ref)
                 })
                 client.query(data).then(res => {
-                    console.log("[All]",res)
                     this.projectFeedbacks = res
                 })
             })
-            .then(() => {
-                this.getFeedbackEvents()
-            })
+            // .then(() => {
+            //     this.getFeedbackEvents()
+            // })
         },
-        getFeedbackEvents(){
-            //Get Events
-            // for(var i=0;i<=this.projectFeedbacks.length;i++){
-            //     }
-            client.query(
-            q.Paginate(q.Events(q.Ref(q.Collection('feedbacks'), '263604011230298635')))
-            ).then((ret) => {
-                console.log("[EVENTS FEED] ",ret)
-                this.events = ret.data
-                // this.events.pop()
-                this.events.reverse()
-            })
+        // getFeedbackEvents(){
+        //     //Get Events
+        //     client.query(
+        //     q.Paginate(q.Events(q.Ref(q.Collection('feedbacks'), '263604011230298635')))
+        //     ).then((ret) => {
+        //         console.log("[EVENTS FEED] ",ret)
+        //         this.events = ret.data
+        //         this.events.reverse()
+        //     })
             
-        },
+        // },
         addFeedback(){
             this.$vs.loading({})
             this.feedbackData = {

@@ -6,23 +6,15 @@
                     <div class="text-center mb-4">
                         <p class="text-blue font-semibold text-3xl">Project Management | <span class="font-base text-base"> Beta</span> </p>
                     </div>
+                    <!-- <h2 class="font-light mb-4 text-center text-gray-600">Login to our website</h2> -->
                     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-t-4 border-blue">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-light mb-2" for="name">
-                                Name
-                            </label>
-                            <input  v-model="name" v-validate="'required|min:3'" data-vv-validate-on="blur" :class="errors.first('name') ? 'border border-red-500' : '' "
-                                name="name" class="shadow-sm appearance-none  rounded w-full py-2 px-3 text-gray-700 leading-tight"
-                                id="name" type="text" placeholder="Username">
-                            <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('name') }}</span>
-                        </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-light mb-2" for="email">
                                 Email
                             </label>
                             <input  v-model="email" v-validate="'required|email|min:3'" data-vv-validate-on="blur" :class="errors.first('email') ? 'border border-red-500' : '' "
                                 name="email" class="shadow-sm appearance-none  rounded w-full py-2 px-3 text-gray-700 leading-tight"
-                                id="username" type="text" placeholder="Email">
+                                id="username" type="text" placeholder="Enter your email">
                             <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('email') }}</span>
                         </div>
                         <div class="mb-6">
@@ -36,16 +28,18 @@
                             <span class="text-red-500 font-thin text-sm mt-4">{{ errors.first('password') }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <router-link :to="{ name:'project-login' }">
-                                    Login
-                            </router-link>
-                            <vs-button :disabled="!validateForm" variant="primary" @click.prevent="createUser()">Register</vs-button>
+                            <p>
+                                <router-link :to="{ name:'register' }">
+                                    Register
+                                </router-link>
+                            </p>
+                            <vs-button :disabled="!validateForm" variant="primary" @click.prevent="loginUser()">Login</vs-button>
                         </div>
                     </form>
-                    <p class="flex justify-center">
-                        <a href=" https://github.com/parag1997/vue-fauna-test">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-4.466 19.59c-.405.078-.534-.171-.534-.384v-2.195c0-.747-.262-1.233-.55-1.481 1.782-.198 3.654-.875 3.654-3.947 0-.874-.312-1.588-.823-2.147.082-.202.356-1.016-.079-2.117 0 0-.671-.215-2.198.82-.64-.18-1.324-.267-2.004-.271-.68.003-1.364.091-2.003.269-1.528-1.035-2.2-.82-2.2-.82-.434 1.102-.16 1.915-.077 2.118-.512.56-.824 1.273-.824 2.147 0 3.064 1.867 3.751 3.645 3.954-.229.2-.436.552-.508 1.07-.457.204-1.614.557-2.328-.666 0 0-.423-.768-1.227-.825 0 0-.78-.01-.055.487 0 0 .525.246.889 1.17 0 0 .463 1.428 2.688.944v1.489c0 .211-.129.459-.528.385-3.18-1.057-5.472-4.056-5.472-7.59 0-4.419 3.582-8 8-8s8 3.581 8 8c0 3.533-2.289 6.531-5.466 7.59z"/></svg>
-                        </a>
+                    <p class="text-center text-gray-600 text-sm">
+                        &copy;2020 Company. All rights reserved.
+                    </p>
+                    <p>
                     </p>
                 </div>
             </div>
@@ -62,40 +56,12 @@ export default {
     mixins: [appMixin],
     data(){
         return {
-            name: '',
             email: '',
             password: '',
+            token: ''
         }
     },
     methods: {
-        onSubmit() {
-        this.$validator.validateAll().then(result => {
-            if (!result) {
-            return;
-            }
-
-            alert("Form submitted!");
-        });
-        },
-        createUser(){
-            client.query(
-            q.Create(
-                q.Collection('users'), {
-                    credentials: {password: this.password},
-                    data:{
-                        name: this.name,
-                        email: (this.email).toLowerCase()
-                    }
-                }
-            )
-            )
-            .then(() => {
-                this.loginUser() 
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        },
         loginUser(){
             this.$vs.loading({})
             client.query(
@@ -131,12 +97,13 @@ export default {
             })
             .catch(err => {
                 console.log(err)
+                
             })
         }
     },
     computed: {
     validateForm() {
-      return !this.errors.any() && this.name != "" && this.email != "" && this.password != "";
+      return !this.errors.any() && this.email != "" && this.password != "";
     }
   }
 }

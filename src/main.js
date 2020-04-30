@@ -5,11 +5,11 @@ import App from './App.vue'
 import router from './router/index.js'
 import store from './store'
 import Vuesax from 'vuesax'
+import VuePageTransition from 'vue-page-transition'
 
-import 'vuesax/dist/vuesax.css'
-import 'material-icons/iconfont/material-icons.css'
 
 Vue.use(Vuesax)
+Vue.use(VuePageTransition)
 
 import Toast from "vue-toastification";
 import VeeValidate from 'vee-validate';
@@ -19,6 +19,8 @@ import { VueMasonryPlugin } from 'vue-masonry';
 //css
 import "vue-toastification/dist/index.css";
 import './assets/tailwind.css'
+import 'vuesax/dist/vuesax.css'
+import 'material-icons/iconfont/material-icons.css'
 
 import VTooltip from 'v-tooltip'
 
@@ -41,6 +43,16 @@ router.beforeEach((to, from, next) => {
             next()
         }
     } else {
+        if (to.matched.some(record => record.meta.isPublic)) {
+            if (localStorage.getItem('token') != null) {
+                next({
+                    path: '/',
+                    query: { redirect: to.fullPath }
+                })
+            } else {
+                next()
+            }
+        }
         next()
     }
 })

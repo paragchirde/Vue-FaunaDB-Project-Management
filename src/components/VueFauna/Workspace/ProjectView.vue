@@ -1,25 +1,27 @@
 <template>
     <div>
-        <Header/>
         <div v-if="loading">Loading Data....</div>
-        <div v-else class="flex flex-wrap">
+        <div v-else class="flex flex-wrap h-screen">
             <div class="w-full md:w-3/4 p-12">
-                <router-link :to="{ name:'dashboard' }">
+                <div class="mb-4 bg-orange-200 text-orange-500 font-light text-lg items-center p-2 shadow-inner">
+                    The workspace features are in development. Please visit us back again later. Thank you for your patience :)
+                </div>
+                <router-link :to="{ name:'workspace' }">
                     <vs-button type="border" size="small"
                     >Dashboard</vs-button>
                 </router-link>
                 <div class="flex justify-between flex-wrap">
                     <div>   
-                        <div class="font-semibold text-xl md:text-4xl text-gray-700 mb-2">{{ project.data.name }} |  <p class="text-sm font-base bg-blue text-white inline-block px-1">{{ project.data.type }}</p></div>
+                        <div class="font-semibold text-xl md:text-4xl text-gray-700 mb-2">{{ wsProject.name }} |  <p class="text-sm font-base bg-blue text-white inline-block px-1">{{ wsProject.type }}</p></div>
                         <vs-chip color="primary" transparent>
-                            Creared At: {{ moment(project.data.created_at).format('MMMM Do YYYY') }} |
-                            {{  moment(project.data.created_at).fromNow()  }}
+                            Creared At: {{ moment(wsProject.created_at).format('MMMM Do YYYY') }} |
+                            {{  moment(wsProject.created_at).fromNow()  }}
                         </vs-chip>
                     </div> 
                     <vs-divider class="block md:hidden "></vs-divider>
                     <div class="flex items-center flex-wrap">
-                        <vs-button @click="popupActivo=true" color="primary" type="filled" class="w-full">Add New Payment</vs-button>
-                        <vs-popup class="holamundo"  title="Add a new payment for your project" :active.sync="popupActivo">
+                        <!--    <vs-button @click="popupActivo=true" color="primary" type="filled" class="w-full">Add New Payment</vs-button> -->
+                        <!-- <vs-popup class="holamundo"  title="Add a new payment for your project" :active.sync="popupActivo">
                         <div>
                             <div class="flex flex-wrap">
                                 <div class="w-full">
@@ -77,13 +79,12 @@
                             </div>
                             <div class="float-right mt-4">
                                 <div class="">
-                                    <vs-button @click.prevent="addPayment()" color="primary" type="filled">Add New</vs-button>
+                                    <vs-button @click.prevent="addPayment()" color="primary" type="filled">Add New <b-spinner label="Loading..." small v-if="loading2==true"></b-spinner></vs-button>
                                 </div>
                             </div> 
                         </div>
-                        </vs-popup>
-                        <!--  -->
-                        <div class="mt-2 font-light items-end w-full">
+                        </vs-popup> -->
+                        <!-- <div class="mt-2 font-light items-end w-full">
                             <div class="flex justify-between">
                                 <p>Status</p>
                                 <p>
@@ -98,28 +99,28 @@
                             >
                             <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in paymentMethods1" />
                             </vs-select>
-                        </div>
+                        </div> -->
                     </div> 
                 </div>
                 <vs-divider class="block md:hidden "></vs-divider>
                 <div class="mt-4">
                     <div class="flex flex-wrap justify-between">
-                        <div class="w-full md:w-1/2 px-4 pt-2 mt-2">
+                        <!-- <div class="w-full md:w-1/2 px-4 pt-2 mt-2">
                             <p class="text-gray-700 text-2xl font-bold mb-2">
                                 Client Details
                             </p>
                             <p class="text-gray-700 text-base font-light">{{ project.data.client }} | {{ project.data.clientEmail }} </p>
                             <p class="text-gray-700 text-base font-light">{{ project.data.clientContact }}</p>
-                        </div>
+                        </div> -->
                         <!-- Total -->
-                        <div class="w-full md:w-1/2 flex flex-wrap shadow-md mt-2 text-center m-auto">
+                        <!-- <div class="w-full md:w-1/2 flex flex-wrap shadow-md mt-2 text-center m-auto">
                             <div class="w-full md:w-1/3 bg-white p-2 border-l-4 border-blue">
                                     <p class="font-base text-base text-gray-500 mb-2">Estimated</p>
-                                <p class="font-bold text-xl text-blue mb-2"> ₹{{ (project.data.cost)}}</p>
+                                <p class="font-bold text-xl text-blue mb-2"> ₹{{ parseInt(project.data.cost).toLocaleString('en-IN') }}</p>
                             </div>
                             <div class="w-full md:w-1/3 bg-white p-2 border-l-4 border-green-400">
                                     <p class="font-base text-base text-gray-500 mb-2">Received</p>
-                                <p class="font-bold text-xl text-green-500 mb-2">₹{{ (project.data.totalReceived) }}</p>
+                                <p class="font-bold text-xl text-green-500 mb-2">₹{{ (project.data.totalReceived).toLocaleString('en-IN') }}</p>
                             </div>
                             <div class="w-full md:w-1/3 bg-white border-l-4 border-orange-400 p-2">
                                 <div  v-if="PendingAmount > 0">
@@ -132,7 +133,7 @@
                                     <p class="font-bold text-sm text-green-400 mb-2">+ ₹{{ Math.abs(PendingAmount) }}</p>
                                 </div>
                             </div>
-                        </div>  
+                        </div>   -->
                     </div>  
                 </div>
                 <!-- Payments -->
@@ -145,7 +146,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path d="M20 11.999c1.654 0 3 1.347 3 3.001s-1.346 3-3 3-3-1.346-3-3 1.346-3.001 3-3.001zm0-1c-2.209 0-4 1.792-4 4.001s1.791 4 4 4 4-1.791 4-4-1.791-4.001-4-4.001zm.167 5.65v.351h-.334v-.333c-.344-.006-.702-.088-1-.242l.152-.548c.319.124.743.255 1.074.18.383-.086.462-.48.039-.67-.311-.145-1.26-.269-1.26-1.081 0-.455.346-.861.994-.95v-.356h.334v.339c.24.006.512.049.814.141l-.121.548c-.256-.089-.539-.171-.814-.153-.496.029-.541.459-.193.639.569.268 1.314.467 1.314 1.181.001.572-.446.877-.999.954zm-10.344-6.234c-.417-.216-.363-.731.232-.767.33-.021.67.078.977.186l.146-.659c-.363-.11-.688-.16-.978-.168v-.407h-.4v.427c-.778.107-1.193.594-1.193 1.14 0 .975 1.139 1.125 1.512 1.297.508.229.413.701-.047.805-.397.09-.906-.067-1.289-.216l-.183.657c.357.185.787.283 1.2.291v.399h.4v-.421c.663-.093 1.2-.459 1.2-1.147 0-.856-.893-1.096-1.577-1.417zm4.927 4.585c0-2.896 2.355-5.251 5.25-5.251v-4.749h-20v12h15.15c-.255-.617-.4-1.292-.4-2zm-4.75 0c-2.209 0-4-1.791-4-4s1.791-4.001 4-4.001 4 1.792 4 4.001-1.791 4-4 4z"/></svg>
                                     Payment Details
                                 </p>
-                                <PaymentCard :paymentData="projectPayments"/>
+                                <!-- <PaymentCard :paymentData="projectPayments"/> -->
                             </div>
                         </div>
                     </vs-tab>
@@ -154,7 +155,7 @@
                             <div class="h-auto w-full mt-4">
                                 <div>
                                     <!-- <Feedback :projectId="id" @call-getAll="faunaGetByProjectId()"/> -->
-                                    <Feedback :projectId="id"/>
+                                    <!-- <Feedback :projectId="id"/> -->
                                 </div>
                             </div>
                         </div>
@@ -164,27 +165,25 @@
             <div class="w-full md:w-1/4 bg-gray-300 h-auto p-4 text-sm overflow-y-auto">
                 <div class="flex justify-between">
                     <p><span class="text-gray-600 font-semibold text-xl">Activiy</span></p>
-                    <div>
+                    <!-- <div>
                         <vs-button @click="remove()" color="danger" size="small">Delete Project</vs-button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="text-orange-500 text-base" v-if="events==null">Loading Data</div>
                 <div v-else>
-                    <Events  :events="events"/>
+                    <!-- <Events  :events="events"/> -->
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
-import Events from '../Components/Events'
-import { appMixin } from '../../mixins.js'
-import { userMixin } from '../../userStateMixin.js'
-import PaymentCard from '../Components/PaymentCard'
-import Feedback from '../Components/Feedback'
-import Header from './Header'
+import {appMixin} from '../../../mixins.js'
+import { userMixin } from '../../../userStateMixin.js'
+import  {WorkspaceMixin} from '../../../WorkspaceMixin.js'
+// import Events from '../Events'
+// import PaymentCard from '../PaymentCard'
+// import Feedback from '../Feedback'
 var moment = require('moment');
 
 // Fauna setup
@@ -193,18 +192,19 @@ const client = new faunadb.Client({secret: process.env.VUE_APP_FAUNA_SECRET})
 const q = faunadb.query
 
 export default {
-    mixins: [appMixin, userMixin],
-    props:['id'],
+    mixins: [WorkspaceMixin,appMixin, userMixin],
+    props:['id','name'],
     components:{
-        Header,
-        PaymentCard,
-        Events,
-        Feedback
+        // PaymentCard,
+        // Events,
+        // Feedback,
     },
     data(){
         return{
+            wsClient:null,
+            qWs:null,
             moment: moment,
-            project: [],
+            wsProject: [],
             events: [],
             projectPayments: [],
             projectFeedbacks: [],
@@ -240,159 +240,140 @@ export default {
         }
     },
     created(){
-        this.faunaGetByProjectId()
+        client.query(q.Get(q.Match(q.Index('user_by_email'), this.$store.state.user.email)))
+        .then(res => {
+            var data = res.data.workspaces
+            data.some(w => {
+                if(w.name === this.name){
+                    this.keyX = w.key
+                    this.setInstance(this.keyX)
+                }
+            })
+        })
+        .then(() => {
+            this.getWsProject()
+        })
+        .catch(() => {
+            console.log(':(')
+            this.$router.push({name: 'workspace'})
+        })
     },
     methods:{
-        async faunaGetByProjectId(){
+        getWsProject(){
             this.loading = true
-                await client.query(
-                q.Get(q.Ref(q.Collection('projects'), this.id))
-                )
-                .then(res => {
-                    if(res.data.created_by == this.$store.state.user.email){
-                        this.loading = false
-                        this.project = res
-                        this.totalReceived = res.data.totalReceived
-                        this.selectedStatus = res.data.status
-
-                         client.query(
-                    q.Paginate(q.Events(q.Ref(q.Collection('projects'), this.project.ref.id)))
-                    ).then((ret) => {
-                        // console.log("[EVENTS] ",ret)
-                        this.events = ret.data
-                        // this.events.pop()
-                        this.events.reverse()
-                    })
-                    //Get payments 
-                    client.query(q.Paginate(q.Match(q.Index('payment_by_project'), this.project.ref.id)))
-                    .then(res => {
-                        var x = res.data
-                        const data = x.map(ref => {
-                            return q.Get(ref)
-                        })
-                        client.query(data).then(res => {
-                            // console.log("[PAYMENTS] ", res)
-                            this.projectPayments = res
-                        })
-                    })
-                    //Get Feedbacks
-                    client.query(q.Paginate(q.Match(q.Index('feedback_by_project'), this.project.ref.id)))
-                    .then(res => {
-                        var x = res.data
-                        const data = x.map(ref => {
-                            return q.Get(ref)
-                        })
-                        client.query(data).then(res => {
-                            // console.log("[FEEDBACKS] ",res)
-                            this.projectFeedbacks = res
-                        })
-                    })
-
-                    } else {
-                        console.log('OKAY NOT USER')
-                        this.$router.push({name : 'dashboard'})
-                    }
-                })
-                
-        },
-        addEvent(){
-                client.query(
-                q.Insert(
-                    q.Ref(q.Collection('projects'), this.project.ref.id),
-                    Date.now(),
-                    'create',
-                    {
-                        data: {
-                            update: `${this.paymentBy} made a payment of ₹${this.paymentCost} via ${this.paymentMethod}`,
-                            at: moment().format('MMMM Do YYYY, h:mm:ss a')
-                        },
-                    },
-                ),
-                )
-                .then((ret) => {
-                    console.log(ret)
-                    console.log('Ok')
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-        addPayment(){
-            this.paymentData = {
-                "projectId": this.project.ref.id,
-                "paymentDescription": this.paymentDesc,
-                "paymentCost": parseInt(this.paymentCost),
-                "paymentBy": this.paymentBy,
-                "paymentMethod": this.paymentMethod,
-                "paymentReceivedBy": this.paymentReceivedBy,
-                "paymentDate" : this.paymentDate,
-                "at": moment().format('MMMM Do YYYY, h:mm:ss a')
-            }
-            this.paymentObj = {
-                data: this.paymentData
-            }
-            client.query(
-            q.Create(
-                q.Collection('payments'), this.paymentObj
-            )
-            )
-            .then(() => {
-                this.popupActivo=false,
-                this.showToast('Payment Added','Payment Successfully added to the project', 'success')
+            this.getAllWorkspaceProjectById(this.id)
+            .then(res => {
+                console.log(res)
+                this.wsProject = res.data
+                this.loading = false
             })
-            .then(() => {
-                this.updateTotal()
-            })
-            .then(() => {
-                this.faunaGetByProjectId()
-            })
-            .catch(err => {
-                console.log(err)
-                 this.showToast('Error', 'danger')
-            })
-        },
-        updateTotal(){
-            var changedCost = parseInt(this.totalReceived, 10) + parseInt(this.paymentCost, 10)
-            client.query(
-                q.Update(
-                    q.Ref(q.Collection('projects'), this.project.ref.id),
-                    {
-                        data: {
-                            totalReceived: changedCost,
-                            update: `${this.paymentBy} made a payment of ₹${this.paymentCost} via ${this.paymentMethod}`,
-                        }
-                    }
-                    )
-            )
-        },
-        updateStatus(){
-            client.query(
-                q.Update(
-                    q.Ref(q.Collection('projects'), this.project.ref.id),
-                    {
-                        data: {
-                            status: this.selectedStatus,
-                            updateStatus: 'statusUpdate',
-                            update: `Status changed to ${this.selectedStatus}`,
-                        }
-                    }
-                    )
-            )
-            .then(() => {
-                this.faunaGetByProjectId()
-            })
-        },
-        remove(){
-            client.query(
-            q.Delete(
-                q.Ref(q.Collection('projects'), this.id)
-            )
-            )
-            .then((ret) => {
-                console.log(ret)
-                this.$router.push({name:'dashboard'})
-            })
-        },
+        },  
+        // async faunaGetByProjectId(id){
+        //     this.loading = true
+        //         await this.wsClient.query(
+        //         this.qWs.Get(this.qWs.Ref(this.qWs.Collection('projects'), id))
+        //         )
+        //         .then(res => {
+        //             if(res.data.created_by == this.$store.state.user.email){
+        //                 console.log('OKAY USER')
+        //                 this.loading = false
+        //                 this.project = res
+        //                 this.totalReceived = res.data.totalReceived
+        //                 this.selectedStatus = res.data.status
+        //             } else {
+        //                 console.log('OKAY NOT USER')
+        //                 this.$router.push({name : 'ortigan-dashboard'})
+        //             }
+        //         })  
+        //         .catch(err => {
+        //             console.log(err)
+        //         })    
+        // },
+        // addPayment(){
+        //     this.loading2 = true
+        //     this.paymentData = {
+        //         "projectId": this.project.ref.id,
+        //         "paymentDescription": this.paymentDesc,
+        //         "paymentCost": parseInt(this.paymentCost),
+        //         "paymentBy": this.paymentBy,
+        //         "paymentMethod": this.paymentMethod,
+        //         "paymentReceivedBy": this.paymentReceivedBy,
+        //         "paymentDate" : this.paymentDate,
+        //         "at": moment().format('MMMM Do YYYY, h:mm:ss a')
+        //     }
+        //     this.paymentObj = {
+        //         data: this.paymentData
+        //     }
+        //     console.log(this.paymentObj)
+        //     client.query(
+        //     q.Create(
+        //         q.Collection('payments'), this.paymentObj
+        //     )
+        //     )
+        //     .then((ret) => {
+        //         console.log(ret)
+        //         this.popupActivo=false,
+        //         this.showToast('Payment Added', 'success')
+        //     })
+        //     .then(() => {
+        //         this.updateTotal()
+        //     })
+        //     .then(() => {
+        //         this.faunaGetByProjectId()
+        //         this.loading2 = false
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //          this.loading2 = false
+        //          this.showToast('Error', 'danger')
+        //     })
+        // },
+        // updateTotal(){
+        //     var changedCost = parseInt(this.totalReceived, 10) + parseInt(this.paymentCost, 10)
+        //     client.query(
+        //         q.Update(
+        //             q.Ref(q.Collection('projects'), this.project.ref.id),
+        //             {
+        //                 data: {
+        //                     totalReceived: changedCost,
+        //                     update: `${this.paymentBy} made a payment of ₹${this.paymentCost} via ${this.paymentMethod}`,
+        //                 }
+        //             }
+        //             )
+        //     )
+        //     .then(res => {
+        //         console.log("[UPDATE TOTAL:] ", res)
+        //     })
+        // },
+        // updateStatus(){
+        //     client.query(
+        //         q.Update(
+        //             q.Ref(q.Collection('projects'), this.project.ref.id),
+        //             {
+        //                 data: {
+        //                     status: this.selectedStatus,
+        //                     updateStatus: 'statusUpdate',
+        //                     update: `Status changed to ${this.selectedStatus}`,
+        //                 }
+        //             }
+        //             )
+        //     )
+        //     .then(res => {
+        //         console.log("[UPDATE Status:] ", res)
+        //         this.faunaGetByProjectId()
+        //     })
+        // },
+        // remove(){
+        //     client.query(
+        //     q.Delete(
+        //         q.Ref(q.Collection('projects'), this.id)
+        //     )
+        //     )
+        //     .then((ret) => {
+        //         console.log(ret)
+        //         this.$router.push({name:'ortigan-dashboard'})
+        //     })
+        // },
         clearFields(){
             this.paymentDesc= '',
             this.paymentCost='',

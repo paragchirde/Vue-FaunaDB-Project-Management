@@ -3,22 +3,24 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 //ortigan
-import Dashboard from '../components/Components/Dashboard.vue'
-import ProjectView from '../components/Components/ProjectView.vue'
-import Login from '../components/Components/Auth/Login.vue'
-import Register from '../components/Components/Auth/Register.vue'
+import Dashboard from '../components/VueFauna/Dashboard.vue'
+import ProjectView from '../components/VueFauna/ProjectView.vue'
+import Login from '../components/VueFauna/Auth/Login.vue'
+import Register from '../components/VueFauna/Auth/Register.vue'
+import WorkspaceDashboard from '../components/VueFauna/Workspace/Dashboard.vue'
+import WorkspaceProject from '../components/VueFauna/Workspace/ProjectView.vue'
 
-import Users from '../views/Users.vue'
+import Page404 from '../components/VueFauna/shared/PageNotFound.vue'
 
 const routes = [
-    // Ortigan
     {
         path: '/',
         name: 'dashboard',
         component: Dashboard,
         props: true,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            transition: 'zoom'
         }
     },
     {
@@ -32,21 +34,45 @@ const routes = [
     },
     {
         path: '/login',
-        name: 'project-login',
+        name: 'login',
         component: Login,
-        props: true
+        props: true,
+        meta: {
+            isPublic: true
+        }
     },
     {
         path: '/register',
-        name: 'project-register',
-        component: Register,
+        name: 'register',
+        component:Register,
+        meta: {
+            isPublic: true
+        }
+    },
+    //Workspace
+    {
+        path: '/workspace/:name',
+        name: 'workspace',
+        component: WorkspaceDashboard,
+        props: true,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
-        path: '/users',
-        name: 'users',
-        component: Users
+        path: '/workspace/:name/project/:id',
+        name: 'workspace-project',
+        component: WorkspaceProject,
+        props: true,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '*',
+        name: 'Page404',
+        component: Page404
     }
-
 ]
 
 const router = new VueRouter({
