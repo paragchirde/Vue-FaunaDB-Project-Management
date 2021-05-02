@@ -1,4 +1,7 @@
 # vue-fauna-project-mgmt
+A simple project management tool build on top of VueJS and FaunaDB serving as the database. This is a serverless application. 
+- Key Features:
+- Multitenancy - A user has the ability to create a workspace which actually creates a seperate child database in faunaDB.
 
 ## Project setup
 ```
