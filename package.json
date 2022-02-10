@@ -53,7 +53,7 @@
     "extract-loader": "^5.0.1",
     "file-loader": "^6.0.0",
     "mutationobserver-shim": "^0.3.3",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "popper.js": "^1.16.0",
     "portal-vue": "^2.1.6",
     "sass": "^1.26.3",
